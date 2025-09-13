@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber Decoder Ring</title>
+    <title>Shiva's Cyber Decoder Ring</title>
     <!-- External Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
@@ -104,14 +104,18 @@
         
         <!-- Header Section -->
         <header class="text-center mb-6 shrink-0">
-            <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold gradient-text">Decode, Inspect, Secure</h1>
-            <p class="text-slate-400 mt-2 text-sm sm:text-base">Developed by Mr Vk</p>
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold gradient-text">Shiva's Cyber Decoder Ring</h1>
+            <p class="text-slate-400 mt-2 text-sm sm:text-base">Aapka Ultimate Cyber Security Swiss Army Knife!</p>
         </header>
 
         <!-- Tab Navigation -->
         <div class="border-b border-blue-900/50 mb-6 shrink-0">
             <div class="flex overflow-x-auto">
                 <button class="tab-button active" data-tab="encoder"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" /></svg>Encoder/Decoder</button>
+                <button class="tab-button" data-tab="js-scraper"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75c0 8.284-6.716 15-15 15m15-15v15m0-15H9.75m7.5 0c0 4.418-3.358 8-7.5 8s-7.5-3.582-7.5-8" /></svg>JS Scraper</button>
+                <button class="tab-button" data-tab="data-analyzer"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.898 20.572L16.5 21.75l-.398-1.178a3.375 3.375 0 00-2.455-2.456L12.75 18l1.178-.398a3.375 3.375 0 002.455-2.456L16.5 14.25l.398 1.178a3.375 3.375 0 002.456 2.456L20.25 18l-1.178.398a3.375 3.375 0 00-2.456 2.456z" /></svg>Data Analyzer</button>
+                <button class="tab-button" data-tab="subdomain-finder"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" /></svg>Subdomain Finder</button>
+                <button class="tab-button" data-tab="security-headers"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.286zm0 13.036h.008v.008h-.008v-.008z" /></svg>Security Headers</button>
                 <button class="tab-button" data-tab="jwt"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" /></svg>JWT Inspector</button>
                 <button class="tab-button" data-tab="timestamp"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>Timestamp</button>
                 <button class="tab-button" data-tab="url-parser"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" /></svg>URL Parser</button>
@@ -158,6 +162,80 @@
                         </div>
                         <textarea id="outputText" class="w-full h-64 sm:h-80 bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none resize-none" readonly placeholder="Result yahan dikhega..."></textarea>
                     </div>
+                </div>
+            </div>
+
+            <!-- JS Scraper Tab -->
+            <div id="js-scraper" class="tab-content">
+                <div class="glass-card p-6 rounded-xl">
+                     <h2 class="text-2xl font-semibold mb-4 text-blue-400">JS File Scraper & Endpoint Extractor</h2>
+                    <p class="text-slate-400 mb-4">Enter a URL to fetch its HTML, find all linked JavaScript files, and scan them for potential endpoints and secrets.</p>
+                    <div class="flex flex-col sm:flex-row gap-4 items-center">
+                        <input id="jsUrlInput" type="text" class="w-full bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="https://example.com">
+                        <button id="jsScrapeBtn" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg action-btn">Scrape</button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
+                    <div class="glass-card p-6 rounded-xl lg:col-span-1">
+                         <h2 class="text-2xl font-semibold mb-4 text-blue-400">JS Files Found</h2>
+                         <div id="jsFilesList" class="h-96 overflow-y-auto space-y-2"></div>
+                    </div>
+                    <div class="glass-card p-6 rounded-xl lg:col-span-2">
+                        <h2 class="text-2xl font-semibold mb-4 text-blue-400">Extracted Information</h2>
+                        <div id="jsResultsOutput" class="h-96 overflow-y-auto space-y-4"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Data Analyzer Tab -->
+            <div id="data-analyzer" class="tab-content">
+                <div class="glass-card p-6 rounded-xl">
+                    <h2 class="text-2xl font-semibold mb-4 text-blue-400">Data Analyzer</h2>
+                    <p class="text-slate-400 mb-4">Paste any hash or encoded string to automatically detect its potential format(s).</p>
+                    <textarea id="analyzerInput" class="w-full h-24 bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-colors" placeholder="Paste data here... e.g., eyJhbGciOiJIUzI1NiJ9..."></textarea>
+                    <button id="analyzerBtn" class="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg action-btn">Analyze Data</button>
+                    <div id="analyzerOutput" class="mt-6 p-4 bg-slate-900 rounded-md min-h-[8rem] font-mono"></div>
+                </div>
+            </div>
+
+            <!-- Subdomain Finder Tab -->
+            <div id="subdomain-finder" class="tab-content">
+                <div class="glass-card p-6 rounded-xl">
+                    <h2 class="text-2xl font-semibold mb-4 text-blue-400">Subdomain Finder</h2>
+                    <div class="flex flex-col sm:flex-row gap-4 items-center mb-4">
+                        <input id="subdomainDomainInput" type="text" class="w-full bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="example.com">
+                        <button id="subdomainFindBtn" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg action-btn">Find Subdomains</button>
+                    </div>
+                    <div id="subdomain-status" class="text-slate-400 mb-4 h-6"></div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                             <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-xl font-semibold text-green-400">✅ Active Subdomains</h3>
+                                <button id="subdomainDownloadActiveBtn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-3 rounded-lg action-btn hidden">Download</button>
+                            </div>
+                            <textarea id="subdomainOutputActive" class="w-full h-80 bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none resize-none" readonly></textarea>
+                        </div>
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-xl font-semibold text-red-400">❌ Inactive Subdomains</h3>
+                                <button id="subdomainDownloadAllBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded-lg action-btn hidden">Download All</button>
+                            </div>
+                            <textarea id="subdomainOutputInactive" class="w-full h-80 bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none resize-none" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Security Headers Tab -->
+            <div id="security-headers" class="tab-content">
+                <div class="glass-card p-6 rounded-xl">
+                    <h2 class="text-2xl font-semibold mb-4 text-blue-400">Security Header Analyzer</h2>
+                    <p class="text-slate-400 mb-4">Enter a full URL (including https://) to check its security headers.</p>
+                    <div class="flex flex-col sm:flex-row gap-4 items-center">
+                        <input id="headerUrlInput" type="text" class="w-full bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="https://example.com">
+                        <button id="headerAnalyzeBtn" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg action-btn">Analyze</button>
+                    </div>
+                    <div id="headerOutput" class="mt-6"></div>
                 </div>
             </div>
             
@@ -262,6 +340,10 @@
         setupTabNavigation();
         setupToast();
         setupEncoder();
+        setupJsScraper();
+        setupDataAnalyzer();
+        setupSubdomainFinder();
+        setupSecurityHeaders();
         setupJWT();
         setupTimestamp();
         setupURLParser();
@@ -368,6 +450,322 @@
         caesarShift.addEventListener('input', transformText);
         document.querySelectorAll('input[name="action"]').forEach(r => r.addEventListener('change', transformText));
         handleAlgorithmChange(); // Initial setup
+    }
+
+    /**
+     * Sets up the JS Scraper & Endpoint Extractor module.
+     */
+    function setupJsScraper() {
+        const urlInput = document.getElementById('jsUrlInput');
+        const scrapeBtn = document.getElementById('jsScrapeBtn');
+        const filesList = document.getElementById('jsFilesList');
+        const resultsOutput = document.getElementById('jsResultsOutput');
+
+        const REGEX_PATTERNS = {
+            'RSA Private Key': { regex: /-----BEGIN RSA PRIVATE KEY-----/g, severity: 'Critical' },
+            'AWS Access Key ID': { regex: /AKIA[0-9A-Z]{16}/g, severity: 'High' },
+            'Slack Token': { regex: /(xox[p|b|a|r]-[0-9a-zA-Z]{10,12}-[0-9a-zA-Z]{10,12}-[0-9a-zA-Z]{10,12}-[a-zA-Z0-9]{32})/g, severity: 'High', group: 1 },
+            'Stripe Secret Key': { regex: /sk_live_[0-9a-zA-Z]{24}/g, severity: 'High' },
+            'Google API Key': { regex: /AIza[0-9A-Za-z-_]{35}/g, severity: 'High' },
+            'Generic Secret/Key': { regex: /(?:api|token|key|secret|password|auth|bearer|cred)[\w-]{0,25}\s*[:=]\s*['"`]([a-zA-Z0-9-_\.]{16,})['"`]/gi, severity: 'High', group: 1 },
+            'Firebase URL': { regex: /[a-zA-Z0-9-]+\.firebaseio\.com/g, severity: 'Medium' },
+            'Stripe Publishable Key': { regex: /pk_live_[0-9a-zA-Z]{24}/g, severity: 'Medium' },
+            'API Endpoint Path': { regex: /(['"`])((?:\/|\.\/|\.\.\/)[^'"`\s]*api\/[^'"`\s]+)\1/g, severity: 'Medium', group: 2 },
+            'Full URL': { regex: /(['"`])(https?:\/\/[^'"`\s]+)\1/g, severity: 'Info', group: 2 }
+        };
+
+        scrapeBtn.addEventListener('click', async () => {
+            let url = urlInput.value.trim();
+            if (!url) { resultsOutput.innerHTML = '<p class="text-yellow-400">Please enter a URL to scrape.</p>'; return; }
+            if (!url.startsWith('http')) url = 'https://' + url;
+            urlInput.value = url;
+
+            filesList.innerHTML = '<p class="text-slate-400">Fetching HTML...</p>';
+            resultsOutput.innerHTML = '<p class="text-slate-400">Waiting to fetch JS files...</p>';
+            scrapeBtn.disabled = true; scrapeBtn.textContent = 'Scraping...'; scrapeBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+            try {
+                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+                const response = await fetch(proxyUrl);
+                const html = await response.text();
+
+                const scriptRegex = /<script[^>]+src=["']([^"']+)["']/g;
+                let match;
+                const scriptUrls = new Set();
+                while ((match = scriptRegex.exec(html)) !== null) {
+                    try {
+                        const scriptUrl = new URL(match[1], url).href;
+                        scriptUrls.add(scriptUrl);
+                    } catch (e) { console.warn("Invalid script URL found:", match[1]); }
+                }
+
+                if (scriptUrls.size === 0) {
+                    filesList.innerHTML = '<p class="text-slate-400">No external JS files found.</p>';
+                    resultsOutput.innerHTML = '';
+                    return;
+                }
+                
+                filesList.innerHTML = Array.from(scriptUrls).map(src => `<div class="p-2 bg-slate-800 rounded text-sm break-all">${src}</div>`).join('');
+                resultsOutput.innerHTML = '<p class="text-slate-400">Analyzing JS files...</p>';
+                
+                let findingsHtml = '';
+                for (const scriptUrl of scriptUrls) {
+                    let scriptFindings = '';
+                    try {
+                        const scriptProxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(scriptUrl)}`;
+                        const scriptRes = await fetch(scriptProxy);
+                        const scriptContent = await scriptRes.text();
+
+                        for (const [name, pattern] of Object.entries(REGEX_PATTERNS)) {
+                            pattern.regex.lastIndex = 0; 
+                            let findingMatch;
+                            while ((findingMatch = pattern.regex.exec(scriptContent)) !== null) {
+                                const finding = (pattern.group ? findingMatch[pattern.group] : findingMatch[0]).replace(/\\/g, '');
+                                const severity = pattern.severity;
+                                const sevColorClass = severity === 'Critical' ? 'bg-purple-500/20 text-purple-400' :
+                                                      severity === 'High' ? 'bg-red-500/20 text-red-400' :
+                                                      severity === 'Medium' ? 'bg-yellow-500/20 text-yellow-400' :
+                                                      'bg-blue-500/20 text-blue-400';
+                                
+                                scriptFindings += `<div class="p-2 border-l-4 border-slate-600">
+                                    <p class="font-semibold">${name} <span class="text-sm font-normal px-2 py-1 rounded-full ${sevColorClass}">${severity}</span></p>
+                                    <p class="text-slate-300 break-all font-mono text-sm">${finding}</p>
+                                </div>`;
+                            }
+                        }
+                    } catch (e) {
+                         scriptFindings += `<div class="p-2 border-l-4 border-red-500"><p class="text-red-400">Could not fetch or analyze.</p></div>`;
+                    }
+                    if (scriptFindings) {
+                        findingsHtml += `<div class="mb-4"><h3 class="font-bold text-blue-400 break-all">${scriptUrl}</h3><div class="space-y-2 mt-2">${scriptFindings}</div></div>`;
+                    }
+                }
+                resultsOutput.innerHTML = findingsHtml || '<p class="text-slate-400">No specific endpoints or secrets found in the scanned files.</p>';
+
+            } catch (error) {
+                filesList.innerHTML = `<p class="text-red-400">Error fetching URL.</p>`;
+                resultsOutput.innerHTML = `<p class="text-red-400">${error.message}</p>`;
+            } finally {
+                 scrapeBtn.disabled = false; scrapeBtn.textContent = 'Scrape'; scrapeBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+        });
+    }
+
+    /**
+     * Sets up the Data Analyzer (Identifier) module.
+     */
+    function setupDataAnalyzer() {
+        const analyzerInput = document.getElementById('analyzerInput');
+        const analyzerBtn = document.getElementById('analyzerBtn');
+        const analyzerOutput = document.getElementById('analyzerOutput');
+
+        const DETECTION_RULES = [
+            { name: 'JWT (JSON Web Token)', regex: /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_.+/=]*$/ },
+            { name: 'SHA-512 Hash', regex: /^[a-f0-9]{128}$/i },
+            { name: 'SHA-256 Hash', regex: /^[a-f0-9]{64}$/i },
+            { name: 'SHA-1 Hash', regex: /^[a-f0-9]{40}$/i },
+            { name: 'MD5 Hash', regex: /^[a-f0-9]{32}$/i },
+            { name: 'URL Encoded String', regex: /%[0-9a-fA-F]{2}/ },
+            { name: 'Base64 Encoded String', regex: /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/i },
+            { name: 'Hexadecimal String', regex: /^[0-9a-fA-F]+$/i },
+        ];
+
+        analyzerBtn.addEventListener('click', () => {
+            const input = analyzerInput.value.trim();
+            if (!input) { analyzerOutput.innerHTML = '<p class="text-yellow-400">Please enter some data to analyze.</p>'; return; }
+            const detectedFormats = [];
+            for (const rule of DETECTION_RULES) {
+                if (rule.regex.test(input)) {
+                    if (rule.name === 'Base64 Encoded String' && /^[0-9a-fA-F]+$/i.test(input) && input.length < 20) continue;
+                    detectedFormats.push(rule.name);
+                }
+            }
+            if (detectedFormats.length > 0) {
+                analyzerOutput.innerHTML = `<p class="text-blue-400">Possible Detected Formats:</p><ul class="list-disc list-inside mt-2 space-y-1">${detectedFormats.map(f => `<li class="text-slate-300">${f}</li>`).join('')}</ul>`;
+            } else {
+                analyzerOutput.innerHTML = '<p class="text-slate-400">Could not identify a specific format. The data appears to be <span class="font-bold">Plain Text</span>.</p>';
+            }
+        });
+    }
+
+    /**
+     * Sets up the Subdomain Finder module.
+     */
+    function setupSubdomainFinder() {
+        const domainInput = document.getElementById('subdomainDomainInput');
+        const findBtn = document.getElementById('subdomainFindBtn');
+        const outputActive = document.getElementById('subdomainOutputActive');
+        const outputInactive = document.getElementById('subdomainOutputInactive');
+        const downloadActiveBtn = document.getElementById('subdomainDownloadActiveBtn');
+        const downloadAllBtn = document.getElementById('subdomainDownloadAllBtn');
+        const statusDiv = document.getElementById('subdomain-status');
+
+        findBtn.addEventListener('click', async () => {
+            const domain = domainInput.value.trim();
+            if (!domain) {
+                statusDiv.textContent = 'Please enter a domain name.';
+                return;
+            }
+
+            // Reset UI
+            statusDiv.textContent = `Searching certificates for ${domain}...`;
+            outputActive.value = '';
+            outputInactive.value = '';
+            findBtn.disabled = true;
+            findBtn.textContent = 'Searching...';
+            findBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            downloadActiveBtn.classList.add('hidden');
+            downloadAllBtn.classList.add('hidden');
+
+            try {
+                const response = await fetch(`https://crt.sh/?q=%.${domain}&output=json`);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const data = await response.json();
+                
+                if (data.length === 0) {
+                    statusDiv.textContent = `No subdomains found for ${domain}.`;
+                    return;
+                }
+
+                const subdomains = new Set();
+                data.forEach(cert => {
+                    cert.name_value.split('\n').forEach(name => {
+                        if (name.endsWith(`.${domain}`) && !name.includes('*')) {
+                           subdomains.add(name.trim());
+                        }
+                    });
+                });
+                
+                const sortedSubdomains = Array.from(subdomains).sort();
+                if (sortedSubdomains.length === 0) {
+                    statusDiv.textContent = `No subdomains found for ${domain}.`;
+                    return;
+                }
+                
+                // Start checking status
+                const active = [], inactive = [];
+                let checkedCount = 0;
+                statusDiv.textContent = `Found ${sortedSubdomains.length} unique subdomains. Checking status (0/${sortedSubdomains.length})...`;
+
+                const promises = sortedSubdomains.map(subdomain => {
+                    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent('http://' + subdomain)}`;
+                    return fetch(proxyUrl, { method: 'HEAD', mode: 'cors' })
+                        .then(response => {
+                             if(response.ok || response.status === 404 || response.status === 403) { // Even errors mean it's live
+                                active.push(subdomain);
+                             } else {
+                                inactive.push(subdomain);
+                             }
+                        })
+                        .catch(() => {
+                            inactive.push(subdomain);
+                        })
+                        .finally(() => {
+                            checkedCount++;
+                            statusDiv.textContent = `Checking status (${checkedCount}/${sortedSubdomains.length})...`;
+                        });
+                });
+                
+                await Promise.all(promises);
+
+                outputActive.value = active.sort().join('\n');
+                outputInactive.value = inactive.sort().join('\n');
+                statusDiv.textContent = `Check complete. Found ${active.length} active and ${inactive.length} inactive subdomains.`;
+                if(active.length > 0) downloadActiveBtn.classList.remove('hidden');
+                if(sortedSubdomains.length > 0) downloadAllBtn.classList.remove('hidden');
+
+
+            } catch (error) {
+                statusDiv.textContent = `An error occurred: ${error.message}.`;
+            } finally {
+                findBtn.disabled = false;
+                findBtn.textContent = 'Find Subdomains';
+                findBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+        });
+
+        const download = (filename, text) => {
+             if (!text) return;
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        downloadActiveBtn.addEventListener('click', () => {
+            const domain = domainInput.value.trim() || 'subdomains';
+            download(`${domain}-active.txt`, outputActive.value);
+        });
+        downloadAllBtn.addEventListener('click', () => {
+            const domain = domainInput.value.trim() || 'subdomains';
+            const allText = `--- ACTIVE ---\n${outputActive.value}\n\n--- INACTIVE ---\n${outputInactive.value}`;
+            download(`${domain}-all.txt`, allText);
+        });
+    }
+
+    /**
+     * Sets up the Security Headers Analyzer module.
+     */
+    function setupSecurityHeaders() {
+        const urlInput = document.getElementById('headerUrlInput');
+        const analyzeBtn = document.getElementById('headerAnalyzeBtn');
+        const outputArea = document.getElementById('headerOutput');
+        const SECURITY_HEADERS_DB = {
+            'content-security-policy': { severity: 'High', description: 'Helps prevent Cross-Site Scripting (XSS) and other code injection attacks.', recommendation: "Implement a strict CSP, starting with `default-src 'self'`." },
+            'strict-transport-security': { severity: 'High', description: 'Enforces secure (HTTPS) connections.', recommendation: 'Set `max-age` for a long duration, e.g., `max-age=31536000; includeSubDomains`.' },
+            'x-content-type-options': { severity: 'Medium', description: 'Prevents MIME-sniffing.', recommendation: 'Set to `nosniff`.' },
+            'x-frame-options': { severity: 'Medium', description: 'Protects against clickjacking.', recommendation: 'Set to `SAMEORIGIN` or `DENY`.' },
+            'referrer-policy': { severity: 'Low', description: 'Controls referrer information.', recommendation: 'Set to `strict-origin-when-cross-origin` or `no-referrer`.' },
+            'permissions-policy': { severity: 'Medium', description: 'Controls browser features.', recommendation: 'Disable features you don\'t need.' }
+        };
+
+        analyzeBtn.addEventListener('click', async () => {
+            let url = urlInput.value.trim();
+            if (!url) { outputArea.innerHTML = '<p class="text-yellow-400">Please enter a URL.</p>'; return; }
+            const cleanUrl = url.replace(/^https?:\/\//, '');
+            urlInput.value = url.startsWith('http') ? url : 'https://' + cleanUrl;
+            outputArea.innerHTML = `<p class="text-slate-400">Analyzing headers for ${cleanUrl}...</p>`;
+            analyzeBtn.disabled = true; analyzeBtn.textContent = 'Analyzing...'; analyzeBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            try {
+                const targetApiUrl = `https://api.hackertarget.com/httpheaders/?q=${cleanUrl}`;
+                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetApiUrl)}`;
+                const response = await fetch(proxyUrl);
+                const rawHeaderText = await response.text();
+                if (rawHeaderText.includes("error check your api input") || !response.ok) throw new Error("API error. Check URL or try again later.");
+                
+                const allRawHeaders = {}, headerLines = rawHeaderText.split('\n');
+                headerLines.slice(1).forEach(line => {
+                    const separatorIndex = line.indexOf(':');
+                    if (separatorIndex > 0) {
+                        const key = line.substring(0, separatorIndex).trim().toLowerCase();
+                        const value = line.substring(separatorIndex + 1).trim();
+                        allRawHeaders[key] = value;
+                    }
+                });
+                const presentHeaders = {}, missingHeaders = { ...SECURITY_HEADERS_DB };
+                for (const key in allRawHeaders) { if (key in missingHeaders) { presentHeaders[key] = allRawHeaders[key]; delete missingHeaders[key]; } }
+                
+                let presentHtml = '<h3 class="text-xl font-semibold mb-2 text-green-400">✅ Present Security Headers</h3>';
+                presentHtml += Object.keys(presentHeaders).length > 0 ? `<div class="output-table"><table><tbody>${Object.entries(presentHeaders).map(([k, v]) => `<tr><td class="key">${k}</td><td class="value">${v}</td></tr>`).join('')}</tbody></table></div>` : '<p class="text-slate-400">No recommended security headers found.</p>';
+
+                let missingHtml = '<h3 class="text-xl font-semibold mt-6 mb-2 text-yellow-400">⚠️ Missing Headers & Recommendations</h3>';
+                missingHtml += Object.keys(missingHeaders).length > 0 ? `<div class="space-y-4">${Object.entries(missingHeaders).map(([k, i]) => `<div class="p-4 rounded-md border border-slate-700 bg-slate-900/50"><p class="font-bold text-lg">${k} <span class="text-sm font-normal px-2 py-1 rounded-full ${i.severity === 'High' ? 'bg-red-500/20 text-red-400' : i.severity === 'Medium' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-blue-500/20 text-blue-400'}">${i.severity}</span></p><p class="text-slate-400 mt-1">${i.description}</p><p class="text-slate-300 mt-2"><span class="font-semibold text-blue-400">Recommendation:</span> ${i.recommendation}</p></div>`).join('')}</div>` : '<p class="text-green-400">Excellent! All recommended security headers are present.</p>';
+                
+                let allRawHtml = '<h3 class="text-xl font-semibold mt-6 mb-2 text-slate-400">📋 All Raw Headers</h3>';
+                allRawHtml += Object.keys(allRawHeaders).length > 0 ? `<div class="output-table"><table><tbody>${Object.entries(allRawHeaders).map(([k, v]) => `<tr><td class="key">${k}</td><td class="value">${v}</td></tr>`).join('')}</tbody></table></div>` : '<p class="text-slate-500">Could not retrieve any headers.</p>';
+
+                outputArea.innerHTML = presentHtml + missingHtml + allRawHtml;
+            } catch (error) {
+                outputArea.innerHTML = `<p class="text-red-400">Error: Could not fetch headers. Site may be down or API is unavailable.</p>`;
+            } finally {
+                analyzeBtn.disabled = false; analyzeBtn.textContent = 'Analyze'; analyzeBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+        });
     }
 
     /**
