@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shiva's Cyber Decoder Ring</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        textarea::-webkit-scrollbar { width: 8px; }
+        textarea::-webkit-scrollbar-track { background: #1a202c; }
+        textarea::-webkit-scrollbar-thumb { background-color: #4a5568; border-radius: 20px; }
+        .gradient-text { background: linear-gradient(to right, #38b2ac, #805ad5); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        input[type="radio"]:checked { background-color: currentColor; }
+        .radio-encode:checked { color: #38b2ac; }
+        .radio-decode:checked { color: #805ad5; }
+        .tab-button { padding: 0.75rem 1rem; cursor: pointer; border: none; background: none; color: #a0aec0; font-weight: 600; transition: all 0.2s ease-in-out; border-bottom: 3px solid transparent; white-space: nowrap; display: flex; align-items: center; gap: 0.5rem; }
+        .tab-button:hover { color: #ffffff; }
+        .tab-button.active { color: #ffffff; border-bottom-color: #38b2ac; }
+        .tab-button svg { width: 1.25rem; height: 1.25rem; }
+        .tab-content { display: none; animation: fadeIn 0.5s; }
+        .tab-content.active { display: block; }
+        .output-table table { width: 100%; text-align: left; border-collapse: collapse; }
+        .output-table th, .output-table td { padding: 0.75rem; border: 1px solid #2d3748; }
+        .output-table tr:nth-child(even) { background-color: #1a202c; }
+        .output-table .key { font-weight: 600; color: #63b3ed; width: 30%; }
+        .output-table .value { word-break: break-all; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 min-h-screen flex flex-col items-center p-4 sm:p-6 md:p-8">
+
+    <div class="w-full max-w-7xl">
+        <header class="text-center mb-8">
+            <h1 class="text-4xl sm:text-5xl font-bold gradient-text">Shiva's Cyber Decoder Ring</h1>
+            <p class="text-gray-400 mt-2">Aapka Ultimate Cyber Security Swiss Army Knife!</p>
+        </header>
+
+        <div class="border-b border-gray-700 mb-6">
+            <div class="flex overflow-x-auto">
+                <button class="tab-button active" data-tab="encoder"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" /></svg>Encoder/Decoder</button>
+                <button class="tab-button" data-tab="jwt"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" /></svg>JWT Inspector</button>
+                <button class="tab-button" data-tab="timestamp"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>Timestamp</button>
+                <button class="tab-button" data-tab="url-parser"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" /></svg>URL Parser</button>
+                <button class="tab-button" data-tab="ip-subnet"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" /></svg>IP Subnet</button>
+            </div>
+        </div>
+
+        <!-- Encoder/Decoder Tab -->
+        <div id="encoder" class="tab-content active"><div class="bg-gray-800 p-4 rounded-xl shadow-lg mb-6 flex flex-col items-center space-y-4"><div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full flex-wrap"><div class="flex items-center gap-2"><label for="algorithm" class="font-semibold text-lg">Algorithm:</label><select id="algorithm" class="bg-gray-700 border border-gray-600 text-white text-md rounded-lg focus:ring-teal-500 focus:border-teal-500 block p-2.5"><optgroup label="Two-Way Operations"><option value="base64">Base64</option><option value="url">URL</option><option value="html">HTML Entities</option><option value="caesar">Caesar Cipher</option></optgroup><optgroup label="One-Way / Self-Inverting"><option value="rot13">ROT13 Cipher</option><option value="md5">MD5 (Hash)</option><option value="sha1">SHA-1 (Hash)</option><option value="sha256">SHA-256 (Hash)</option><option value="sha512">SHA-512 (Hash)</option></optgroup></select></div><div id="action-container" class="flex items-center gap-4 p-2.5 bg-gray-700 rounded-lg"><label class="flex items-center cursor-pointer"><input type="radio" name="action" value="encode" class="form-radio h-4 w-4 bg-gray-600 border-gray-500 radio-encode" checked><span class="ml-2 text-teal-400 font-semibold">Encode</span></label><label class="flex items-center cursor-pointer"><input type="radio" name="action" value="decode" class="form-radio h-4 w-4 bg-gray-600 border-gray-500 radio-decode"><span class="ml-2 text-purple-400 font-semibold">Decode</span></label></div></div><div id="caesar-shift-container" class="hidden text-center w-full mt-4"><label for="caesar-shift" class="font-semibold text-lg mr-2">Shift Value (1-25):</label><input type="number" id="caesar-shift" value="3" min="1" max="25" class="bg-gray-700 border border-gray-600 rounded-lg p-2 w-24 text-center"></div></div><main class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="bg-gray-800 p-6 rounded-xl shadow-lg"><h2 class="text-2xl font-semibold mb-4 text-teal-400">Input</h2><textarea id="inputText" class="w-full h-64 sm:h-80 bg-gray-900 border-2 border-gray-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 resize-none transition-colors" placeholder="Yahan apna text daalo..."></textarea></div><div class="bg-gray-800 p-6 rounded-xl shadow-lg"><div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-semibold text-purple-400">Output</h2><button id="copyButton" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200">Copy</button></div><textarea id="outputText" class="w-full h-64 sm:h-80 bg-gray-900 border-2 border-gray-700 rounded-md p-3 focus:outline-none resize-none" readonly placeholder="Result yahan dikhega..."></textarea></div></main></div>
+        
+        <!-- JWT Inspector Tab -->
+        <div id="jwt" class="tab-content"><div class="bg-gray-800 p-6 rounded-xl shadow-lg"><h2 class="text-2xl font-semibold mb-4 text-teal-400">JWT Input</h2><textarea id="jwtInput" class="w-full h-32 bg-gray-900 border-2 border-gray-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 resize-none transition-colors" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"></textarea></div><main class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6"><div class="bg-gray-800 p-6 rounded-xl shadow-lg"><h2 class="text-2xl font-semibold mb-4 text-teal-400">Header (Decoded)</h2><textarea id="jwtHeaderOutput" class="w-full h-48 bg-gray-900 border-2 border-gray-700 rounded-md p-3 resize-none" readonly></textarea></div><div class="bg-gray-800 p-6 rounded-xl shadow-lg"><h2 class="text-2xl font-semibold mb-4 text-purple-400">Payload (Decoded)</h2><textarea id="jwtPayloadOutput" class="w-full h-48 bg-gray-900 border-2 border-gray-700 rounded-md p-3 resize-none" readonly></textarea></div></main></div>
+        
+        <!-- Timestamp Converter Tab -->
+        <div id="timestamp" class="tab-content"><main class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="bg-gray-800 p-6 rounded-xl shadow-lg"><h2 class="text-2xl font-semibold mb-4 text-teal-400">Unix Timestamp to Human Date</h2><label for="unixInput" class="font-semibold mb-2 block">Unix Timestamp (seconds):</label><input id="unixInput" type="number" class="w-full bg-gray-900 border-2 border-gray-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors" placeholder="1678886400"><label for="humanOutput" class="font-semibold mt-4 mb-2 block">Result (UTC):</label><input id="humanOutput" type="text" class="w-full bg-gray-900 border-2 border-gray-700 rounded-md p-3" readonly></div><div class="bg-gray-800 p-6 rounded-xl shadow-lg"><h2 class="text-2xl font-semibold mb-4 text-purple-400">Human Date to Unix Timestamp</h2><label for="humanInput" class="font-semibold mb-2 block">Date/Time String:</label><input id="humanInput" type="text" class="w-full bg-gray-900 border-2 border-gray-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-colors" placeholder="2023-03-15T12:00:00Z"><label for="unixOutput" class="font-semibold mt-4 mb-2 block">Result (Unix Timestamp):</label><input id="unixOutput" type="text" class="w-full bg-gray-900 border-2 border-gray-700 rounded-md p-3" readonly></div></main></div>
+        
+        <!-- URL Parser Tab -->
+        <div id="url-parser" class="tab-content"><div class="bg-gray-800 p-6 rounded-xl shadow-lg"><h2 class="text-2xl font-semibold mb-4 text-teal-400">URL to Parse</h2><textarea id="urlInput" class="w-full h-24 bg-gray-900 border-2 border-gray-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 resize-none transition-colors" placeholder="https://www.example.com:8080/path/to/page?param1=value1&param2=value2#section"></textarea><div id="urlOutput" class="mt-6 output-table"></div></div></div>
+        
+        <!-- IP Subnet Calculator Tab -->
+        <div id="ip-subnet" class="tab-content"><div class="bg-gray-800 p-6 rounded-xl shadow-lg"><h2 class="text-2xl font-semibold mb-4 text-teal-400">IP Subnet Calculator</h2><label for="ipInput" class="font-semibold mb-2 block">IP Address with CIDR</label><input id="ipInput" type="text" class="w-full bg-gray-900 border-2 border-gray-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-colors" placeholder="192.168.1.10/24"><div id="ipOutput" class="mt-6 output-table"></div></div></div>
+
+        <div id="toast" class="fixed bottom-10 right-10 bg-green-500 text-white py-2 px-4 rounded-lg shadow-lg opacity-0 transform translate-y-4 transition-all duration-300">Copied to clipboard!</div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // --- Tab Management ---
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                const tabName = button.getAttribute('data-tab');
+                tabContents.forEach(content => content.classList.toggle('active', content.id === tabName));
+            });
+        });
+
+        const toast = document.getElementById('toast');
+        const showToast = (message = 'Copied to clipboard!') => {
+            toast.textContent = message;
+            toast.classList.remove('opacity-0', 'translate-y-4');
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-4');
+            }, 2000);
+        };
+        
+        document.getElementById('copyButton').addEventListener('click', () => { if(outputText.value) { outputText.select(); document.execCommand('copy'); window.getSelection().removeAllRanges(); showToast(); } });
+        
+        // --- Encoder/Decoder Logic ---
+        const inputText = document.getElementById('inputText'), outputText = document.getElementById('outputText'), algorithmSelect = document.getElementById('algorithm'), actionContainer = document.getElementById('action-container'), caesarShiftContainer = document.getElementById('caesar-shift-container'), caesarShift = document.getElementById('caesar-shift'), TWO_WAY_ALGOS = ['base64', 'url', 'html', 'caesar'];
+        const transformText = () => { let t=inputText.value, a=algorithmSelect.value, o=document.querySelector('input[name="action"]:checked')?.value||'encode', r=''; if(!t){outputText.value='';return} try { switch(a) { case 'base64':r=o==='encode'?btoa(unescape(encodeURIComponent(t))):decodeURIComponent(escape(atob(t)));break; case 'url':r=o==='encode'?encodeURIComponent(t):decodeURIComponent(t.replace(/\+/g, ' '));break; case 'html':{const d=document.createElement('div');if(o==='encode'){d.innerText=t;r=d.innerHTML}else{d.innerHTML=t;r=d.innerText}break} case 'caesar':{const s=parseInt(caesarShift.value,10)||0,d=o==='encode'?s:-s;r=t.replace(/[a-zA-Z]/g,c=>{const b=c<'a'?65:97;return String.fromCharCode(((c.charCodeAt(0)-b+d+26)%26)+b)});break} case 'md5':r=CryptoJS.MD5(t).toString();break; case 'sha1':r=CryptoJS.SHA1(t).toString();break; case 'sha256':r=CryptoJS.SHA256(t).toString();break; case 'sha512':r=CryptoJS.SHA512(t).toString();break; case 'rot13':r=t.replace(/[a-zA-Z]/g,c=>String.fromCharCode((c<='Z'?90:122)>=(c=c.charCodeAt(0)+13)?c:c-26));break; default:r='Invalid algorithm'} } catch(e){r=`Error: Invalid input.`} outputText.value=r; };
+        const handleAlgorithmChange = () => { actionContainer.classList.toggle('hidden',!TWO_WAY_ALGOS.includes(algorithmSelect.value)); caesarShiftContainer.classList.toggle('hidden',algorithmSelect.value!=='caesar'); transformText(); };
+        [inputText, algorithmSelect, caesarShift].forEach(el => el.addEventListener('input', transformText));
+        document.querySelectorAll('input[name="action"]').forEach(r=>r.addEventListener('change',transformText));
+        handleAlgorithmChange();
+
+        // --- JWT Inspector Logic ---
+        const jwtInput=document.getElementById('jwtInput'), jwtHeaderOutput=document.getElementById('jwtHeaderOutput'), jwtPayloadOutput=document.getElementById('jwtPayloadOutput');
+        const decodeJwt=()=>{const t=jwtInput.value;jwtHeaderOutput.value='';jwtPayloadOutput.value='';if(!t||t.split('.').length!==3){jwtHeaderOutput.value='Invalid JWT. Expected three parts separated by dots.';return}const[h,p]=t.split('.');try{jwtHeaderOutput.value=JSON.stringify(JSON.parse(atob(h.replace(/-/g,'+').replace(/_/g,'/'))),null,2)}catch(e){jwtHeaderOutput.value='Error decoding header.'}try{jwtPayloadOutput.value=JSON.stringify(JSON.parse(atob(p.replace(/-/g,'+').replace(/_/g,'/'))),null,2)}catch(e){jwtPayloadOutput.value='Error decoding payload.'}};
+        jwtInput.addEventListener('input',decodeJwt);
+
+        // --- Timestamp Converter Logic ---
+        const unixInput=document.getElementById('unixInput'),humanOutput=document.getElementById('humanOutput'),humanInput=document.getElementById('humanInput'),unixOutput=document.getElementById('unixOutput');
+        unixInput.addEventListener('input',()=>{const t=parseInt(unixInput.value,10);humanOutput.value=!isNaN(t)?new Date(t*1000).toUTCString():''});
+        humanInput.addEventListener('input',()=>{const d=new Date(humanInput.value);unixOutput.value=!isNaN(d.getTime())?Math.floor(d.getTime()/1000):''});
+
+        // --- URL Parser Logic ---
+        const urlInput=document.getElementById('urlInput'),urlOutput=document.getElementById('urlOutput');
+        const parseUrl=()=>{const u=urlInput.value;urlOutput.innerHTML='';if(!u)return;try{const t=new URL(u);let p='';t.searchParams.forEach((v,k)=>{p+=`<tr><td class="key">${k}</td><td class="value">${v}</td></tr>`});const mainDetails=`<table><tbody><tr><td class="key">Protocol</td><td class="value">${t.protocol}</td></tr><tr><td class="key">Hostname</td><td class="value">${t.hostname}</td></tr><tr><td class="key">Port</td><td class="value">${t.port||'(default)'}</td></tr><tr><td class="key">Pathname</td><td class="value">${t.pathname}</td></tr><tr><td class="key">Hash</td><td class="value">${t.hash||'(none)'}</td></tr></tbody></table>`;urlOutput.innerHTML=mainDetails+(p?`<h3 class="text-xl font-semibold mt-6 mb-2 text-purple-400">Query Parameters</h3><table><tbody>${p}</tbody></table>`:'')}catch(e){urlOutput.innerHTML=`<p class="text-red-400">Error: Invalid URL.</p>`}};
+        urlInput.addEventListener('input',parseUrl);parseUrl();
+
+        // --- IP Subnet Calculator ---
+        const ipInput = document.getElementById('ipInput'), ipOutput = document.getElementById('ipOutput');
+        const calculateSubnet = () => {
+            const input = ipInput.value; ipOutput.innerHTML = '';
+            const [ip, cidr] = (input || '').split('/');
+            const cidrInt = parseInt(cidr, 10);
+            if (!ip || isNaN(cidrInt) || cidrInt < 0 || cidrInt > 32) { if (input) ipOutput.innerHTML = '<p class="text-red-400 col-span-2">Invalid format. Use IP/CIDR (e.g., 192.168.1.1/24).</p>'; return; }
+            const ipParts = ip.split('.').map(p => parseInt(p, 10));
+            if (ipParts.length !== 4 || ipParts.some(p => isNaN(p) || p < 0 || p > 255)) { ipOutput.innerHTML = '<p class="text-red-400 col-span-2">Invalid IP address.</p>'; return; }
+            const ipLong = ipParts.reduce((acc, part) => (acc << 8) + part, 0) >>> 0;
+            const mask = (-1 << (32 - cidrInt)) >>> 0;
+            const networkLong = ipLong & mask;
+            const broadcastLong = networkLong | (~mask >>> 0);
+            const longToIp = (long) => [(long >>> 24) & 255, (long >>> 16) & 255, (long >>> 8) & 255, long & 255].join('.');
+            const totalHosts = Math.pow(2, 32 - cidrInt);
+            const results = {"Network Address": longToIp(networkLong),"Broadcast Address": longToIp(broadcastLong),"Subnet Mask": longToIp(mask),"Total Hosts": totalHosts.toLocaleString(),"Usable Host Range": cidrInt > 30 ? 'N/A' : `${longToIp(networkLong + 1)} - ${longToIp(broadcastLong - 1)}`,"Usable Hosts": (cidrInt <= 30 ? totalHosts - 2 : 0).toLocaleString()};
+            ipOutput.innerHTML = `<table><tbody>${Object.entries(results).map(([key, value]) => `<tr><td class="key">${key}</td><td class="value">${value}</td></tr>`).join('')}</tbody></table>`;
+        };
+        ipInput.addEventListener('input', calculateSubnet);
+    });
+    </script>
+</body>
+</html>
+
