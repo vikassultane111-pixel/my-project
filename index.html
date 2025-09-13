@@ -12,88 +12,198 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     
     <!-- Internal Styles -->
-    <style>
-        /* ===== General Body & Scrollbar Styling ===== */
-        body { 
-            font-family: 'Inter', sans-serif;
-            background-color: #0d1117;
-            overflow: hidden;
-            background-image: radial-gradient(circle at top left, rgba(59, 130, 246, 0.15), transparent 40%),
-                              radial-gradient(circle at bottom right, rgba(99, 102, 241, 0.15), transparent 40%);
-        }
-        .overflow-y-auto::-webkit-scrollbar { width: 8px; }
-        .overflow-y-auto::-webkit-scrollbar-track { background: transparent; }
-        .overflow-y-auto::-webkit-scrollbar-thumb { background-color: #3b82f6; border-radius: 20px; }
+           <style>
+        /* ==============================================
+        ===== PROJECT: NEON NOIR THEME by Krysha =====
+        ==============================================
+        Version: 1.0 (Professional)
+        Created for: Shiva (Security Engineer)
+        Description: A sophisticated, dark theme with 
+                     neon accents and professional UI/UX enhancements.
+        */
 
-        /* ===== Typography & Font Styles ===== */
-        h1, h2, .output-table .key, textarea, input[type="text"], input[type="number"] {
-            font-family: 'Roboto Mono', monospace;
+        /* ===== 1. CSS Variables (Theme ka Control Panel) ===== */
+        :root {
+            --color-background: #0d0c1d; /* Gehra Indigo */
+            --color-primary: #00f5c3; /* Neon Teal */
+            --color-secondary: #ad5389; /* Faded Magenta for glows */
+            --color-text-primary: #e0e6f1;
+            --color-text-secondary: #a8b2d1;
+            --color-surface: rgba(23, 22, 45, 0.6); /* Glass Card ka background */
+            --color-border: rgba(0, 245, 195, 0.2);
+            --font-primary: 'Inter', sans-serif;
+            --font-mono: 'Roboto Mono', monospace;
+            --shadow-glow: 0 0 15px rgba(0, 245, 195, 0.4), 0 0 25px rgba(0, 245, 195, 0.2);
         }
+
+        /* ===== 2. General Body & Custom Scrollbar ===== */
+        body {
+            font-family: var(--font-primary);
+            background-color: var(--color-background);
+            background-image: 
+                /* Dynamic Aurora Glow */
+                radial-gradient(ellipse 50% 80% at 20% 40%, rgba(173, 83, 137, 0.2), transparent),
+                radial-gradient(ellipse 50% 80% at 80% 50%, rgba(0, 245, 195, 0.15), transparent),
+                /* Subtle Grid Pattern */
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 20px 20px, 20px 20px;
+            color: var(--color-text-primary);
+            animation: background-pan 20s linear infinite;
+            overflow-x: hidden;
+        }
+
+        /* Yeh hai apna custom scrollbar ka jaadu */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb {
+            background-color: var(--color-primary);
+            border-radius: 10px;
+            border: 2px solid var(--color-background);
+        }
+        ::-webkit-scrollbar-thumb:hover { background-color: #00ffd5; }
+
+
+        /* ===== 3. Typography & Text Styles ===== */
+        h1, h2, .output-table .key, textarea, input[type="text"], input[type="number"] {
+            font-family: var(--font-mono);
+        }
+        
+        /* Gradient text ab aur bhi smooth hai */
         .gradient-text { 
-            background: linear-gradient(to right, #3b82f6, #818cf8, #3b82f6); 
+            background: linear-gradient(90deg, var(--color-secondary), var(--color-primary), var(--color-secondary)); 
             -webkit-background-clip: text; 
             -webkit-text-fill-color: transparent;
             background-size: 200% auto;
             animation: shimmer 5s linear infinite;
+            text-shadow: 0 0 10px rgba(0, 245, 195, 0.2);
         }
 
-        /* ===== Card & Layout Styling ===== */
+        /* ===== 4. Glass Card & Layout Styling ===== */
         .glass-card {
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            background: var(--color-surface);
+            backdrop-filter: blur(12px) saturate(150%);
+            -webkit-backdrop-filter: blur(12px) saturate(150%);
+            border: 1px solid var(--color-border);
+            border-radius: 16px; /* Thode aur rounded corners */
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
         }
 
-        /* ===== Interactive Elements (Tabs, Buttons, Inputs) ===== */
-        input[type="radio"]:checked { background-color: #3b82f6; }
-        input[type="radio"]:disabled { cursor: not-allowed; }
+        /* ===== 5. Interactive Elements (Tabs, Buttons, Inputs) ===== */
+        input[type="radio"]:checked { background-color: var(--color-primary); }
+        input[type="radio"]:disabled { cursor: not-allowed; opacity: 0.5; }
+
         .tab-button { 
-            padding: 0.75rem 1rem; 
+            padding: 0.75rem 1.25rem; 
             cursor: pointer; 
             border: none; 
             background: none; 
-            color: #94a3b8; 
+            color: var(--color-text-secondary); 
             font-weight: 600; 
-            transition: all 0.2s ease-in-out; 
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             border-bottom: 3px solid transparent; 
             white-space: nowrap; 
             display: flex; 
             align-items: center; 
-            gap: 0.5rem; 
+            gap: 0.5rem;
+            position: relative;
         }
         .tab-button:hover { 
-            color: #ffffff;
+            color: var(--color-text-primary);
             transform: translateY(-2px);
         }
         .tab-button.active { 
-            color: #3b82f6; 
-            border-bottom-color: #3b82f6; 
+            color: var(--color-primary); 
+            border-bottom-color: var(--color-primary); 
+            text-shadow: 0 0 5px var(--color-primary);
         }
         .tab-button svg { width: 1.25rem; height: 1.25rem; }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.5s; }
-        .action-btn { transition: all 0.2s ease-in-out; }
-        .action-btn:hover {
-            transform: scale(1.05) translateY(-2px);
-            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
-        }
-        #file-drop-zone { border: 2px dashed #475569; }
-        #file-drop-zone.dragover { border-color: #3b82f6; background-color: rgba(59, 130, 246, 0.1); }
         
-        /* ===== Table Styling ===== */
-        .output-table table { width: 100%; text-align: left; border-collapse: collapse; }
-        .output-table th, .output-table td { padding: 0.75rem; border: 1px solid #1e293b; }
-        .output-table tr:nth-child(even) { background-color: rgba(59, 130, 246, 0.05); }
-        .output-table .value { word-break: break-all; font-family: 'Inter', sans-serif; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: slideInUp 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
 
-        /* ===== Animations ===== */
+        .action-btn { 
+            transition: all 0.3s ease; 
+            border: 1px solid var(--color-border);
+        }
+        .action-btn:hover {
+            transform: scale(1.05) translateY(-3px);
+            box-shadow: var(--shadow-glow);
+            background-color: var(--color-primary);
+            color: #000;
+        }
+        .action-btn:active {
+            transform: scale(0.98) translateY(-1px);
+        }
+
+        /* Input fields ka focus state */
+        textarea:focus, input[type="text"]:focus, input[type="number"]:focus {
+            outline: none;
+            box-shadow: var(--shadow-glow);
+            border-color: var(--color-primary) !important;
+        }
+
+        #file-drop-zone { 
+            border: 2px dashed var(--color-border);
+            transition: all 0.3s ease;
+        }
+        #file-drop-zone.dragover { 
+            border-color: var(--color-primary); 
+            background-color: rgba(0, 245, 195, 0.05);
+            box-shadow: inset 0 0 20px rgba(0, 245, 195, 0.2);
+        }
+        
+        /* ===== 6. BONUS: CSS-Only Tooltips ===== */
+        .tooltip-container {
+            position: relative;
+            display: inline-block;
+        }
+        [data-tooltip]::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #111029;
+            color: var(--color-primary);
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            pointer-events: none;
+            z-index: 10;
+            border: 1px solid var(--color-border);
+        }
+        [data-tooltip]:hover::after {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* ===== 7. Table Styling ===== */
+        .output-table table { width: 100%; text-align: left; border-collapse: collapse; }
+        .output-table th, .output-table td { 
+            padding: 1rem; 
+            border: 1px solid rgba(0, 245, 195, 0.1); 
+        }
+        .output-table tr:nth-child(even) { background-color: rgba(0, 245, 195, 0.03); }
+        .output-table .value { word-break: break-all; font-family: var(--font-primary); }
+        .output-table .key { color: var(--color-primary); }
+
+        /* ===== 8. Animations ===== */
         @keyframes shimmer {
             to { background-position: -200% center; }
         }
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(10px); } 
+        @keyframes slideInUp { 
+            from { opacity: 0; transform: translateY(20px); } 
             to { opacity: 1; transform: translateY(0); } 
+        }
+        @keyframes background-pan {
+            0% { background-position: 0% 0%, 0% 0%, 0 0, 0 0; }
+            100% { background-position: 100% 100%, -100% -100%, 0 0, 0 0; }
         }
     </style>
 </head>
@@ -153,14 +263,14 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div class="glass-card p-6 rounded-xl">
                         <h2 class="text-2xl font-semibold mb-4 text-blue-400">Input</h2>
-                        <textarea id="inputText" class="w-full h-64 sm:h-80 bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-colors" placeholder="Yahan apna text daalo..."></textarea>
+                        <textarea id="inputText" class="w-full h-64 sm:h-80 bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-colors" placeholder="Put Your Input..."></textarea>
                     </div>
                     <div class="glass-card p-6 rounded-xl">
                         <div class="flex justify-between items-center mb-4">
                             <h2 class="text-2xl font-semibold text-blue-400">Output</h2>
                             <button id="copyButton" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg action-btn">Copy</button>
                         </div>
-                        <textarea id="outputText" class="w-full h-64 sm:h-80 bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none resize-none" readonly placeholder="Result yahan dikhega..."></textarea>
+                        <textarea id="outputText" class="w-full h-64 sm:h-80 bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none resize-none" readonly placeholder="Result..."></textarea>
                     </div>
                 </div>
             </div>
@@ -210,14 +320,14 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                              <div class="flex justify-between items-center mb-2">
-                                <h3 class="text-xl font-semibold text-green-400">✅ Active Subdomains</h3>
+                                <h3 class="text-xl font-semibold text-green-400"> Active Subdomains</h3>
                                 <button id="subdomainDownloadActiveBtn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-3 rounded-lg action-btn hidden">Download</button>
                             </div>
                             <textarea id="subdomainOutputActive" class="w-full h-80 bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none resize-none" readonly></textarea>
                         </div>
                         <div>
                             <div class="flex justify-between items-center mb-2">
-                                <h3 class="text-xl font-semibold text-red-400">❌ Inactive Subdomains</h3>
+                                <h3 class="text-xl font-semibold text-red-400"> Inactive Subdomains</h3>
                                 <button id="subdomainDownloadAllBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded-lg action-btn hidden">Download All</button>
                             </div>
                             <textarea id="subdomainOutputInactive" class="w-full h-80 bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none resize-none" readonly></textarea>
