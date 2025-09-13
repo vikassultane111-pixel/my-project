@@ -7,66 +7,70 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body { 
             font-family: 'Inter', sans-serif;
-            background-color: #020617; /* slate-950 */
+            background-color: #0d1117; /* GitHub Dark-like */
             overflow: hidden;
+            background-image: radial-gradient(circle at top left, rgba(59, 130, 246, 0.15), transparent 40%),
+                              radial-gradient(circle at bottom right, rgba(99, 102, 241, 0.15), transparent 40%);
         }
-        #aurora-background {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            background: 
-                radial-gradient(ellipse 80% 50% at 20% 10%, rgba(30, 58, 138, 0.3), transparent),
-                radial-gradient(ellipse 80% 50% at 80% 90%, rgba(56, 189, 248, 0.2), transparent);
-            animation: aurora 20s linear infinite;
-        }
-        @keyframes aurora {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        h1, h2, .output-table .key, textarea, input[type="text"], input[type="number"] {
+            font-family: 'Roboto Mono', monospace;
         }
         .glass-card {
-            background: rgba(15, 23, 42, 0.6); /* slate-900/60 */
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(51, 65, 85, 0.5); /* slate-700/50 */
+            background: rgba(15, 23, 42, 0.7); /* slate-900/70 */
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.2);
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         }
+        /* Removed hover effect from main cards for stability */
         textarea::-webkit-scrollbar, .overflow-y-auto::-webkit-scrollbar { width: 8px; }
         textarea::-webkit-scrollbar-track, .overflow-y-auto::-webkit-scrollbar-track { background: transparent; }
-        textarea::-webkit-scrollbar-thumb, .overflow-y-auto::-webkit-scrollbar-thumb { background-color: #334155; border-radius: 20px; }
-        .gradient-text { background: linear-gradient(to right, #0ea5e9, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        input[type="radio"]:checked { background-color: currentColor; }
+        textarea::-webkit-scrollbar-thumb, .overflow-y-auto::-webkit-scrollbar-thumb { background-color: #3b82f6; border-radius: 20px; }
+        .gradient-text { 
+            background: linear-gradient(to right, #3b82f6, #818cf8, #3b82f6); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: shimmer 5s linear infinite;
+        }
+        @keyframes shimmer {
+            to {
+                background-position: -200% center;
+            }
+        }
+        input[type="radio"]:checked { background-color: #3b82f6; }
         input[type="radio"]:disabled { cursor: not-allowed; }
-        .radio-encode:checked { color: #0ea5e9; } /* sky-500 */
-        .radio-decode:checked { color: #a78bfa; } /* violet-400 */
         .tab-button { padding: 0.75rem 1rem; cursor: pointer; border: none; background: none; color: #94a3b8; font-weight: 600; transition: all 0.2s ease-in-out; border-bottom: 3px solid transparent; white-space: nowrap; display: flex; align-items: center; gap: 0.5rem; }
-        .tab-button:hover { color: #ffffff; }
+        .tab-button:hover { 
+            color: #ffffff;
+            transform: translateY(-2px);
+        }
         .tab-button.active { 
-            color: #ffffff; 
-            border-bottom-color: #0ea5e9; 
-            text-shadow: 0 0 10px rgba(14, 165, 233, 0.5);
+            color: #3b82f6; 
+            border-bottom-color: #3b82f6; 
         }
         .tab-button svg { width: 1.25rem; height: 1.25rem; }
         .tab-content { display: none; animation: fadeIn 0.5s; }
         .tab-content.active { display: block; }
         .output-table table { width: 100%; text-align: left; border-collapse: collapse; }
         .output-table th, .output-table td { padding: 0.75rem; border: 1px solid #1e293b; }
-        .output-table tr:nth-child(even) { background-color: rgba(2, 6, 23, 0.2); }
-        .output-table .key { font-weight: 600; color: #60a5fa; width: 30%; } /* blue-400 */
-        .output-table .value { word-break: break-all; }
+        .output-table tr:nth-child(even) { background-color: rgba(59, 130, 246, 0.05); }
+        .output-table .value { word-break: break-all; font-family: 'Inter', sans-serif; }
         #file-drop-zone { border: 2px dashed #475569; }
-        #file-drop-zone.dragover { border-color: #0ea5e9; background-color: rgba(14, 165, 233, 0.1); }
+        #file-drop-zone.dragover { border-color: #3b82f6; background-color: rgba(59, 130, 246, 0.1); }
+        .action-btn { transition: all 0.2s ease-in-out; }
+        .action-btn:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-300 min-h-screen p-4 sm:p-6 md:p-8">
-
-    <div id="aurora-background"></div>
+<body class="bg-slate-900 text-slate-300 min-h-screen p-4 sm:p-6 md:p-8">
 
     <div class="w-full max-w-7xl h-[calc(100vh-4rem)] flex flex-col z-10">
         <header class="text-center mb-6 shrink-0">
@@ -74,7 +78,7 @@
             <p class="text-slate-400 mt-2">Aapka Ultimate Cyber Security Swiss Army Knife!</p>
         </header>
 
-        <div class="border-b border-slate-700 mb-6 shrink-0">
+        <div class="border-b border-blue-900/50 mb-6 shrink-0">
             <div class="flex overflow-x-auto">
                 <button class="tab-button active" data-tab="encoder"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" /></svg>Encoder/Decoder</button>
                 <button class="tab-button" data-tab="jwt"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" /></svg>JWT Inspector</button>
@@ -88,25 +92,25 @@
 
         <main class="flex-grow overflow-y-auto pr-2">
             <!-- Encoder/Decoder Tab -->
-            <div id="encoder" class="tab-content active"><div class="glass-card p-4 rounded-xl shadow-lg mb-6 flex flex-col items-center space-y-4"><div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full flex-wrap"><div class="flex items-center gap-2"><label for="algorithm" class="font-semibold text-lg">Algorithm:</label><select id="algorithm" class="bg-slate-800 border border-slate-600 text-white text-md rounded-lg focus:ring-2 focus:ring-sky-500 focus:border-sky-500 block p-2.5"><optgroup label="Two-Way Operations"><option value="base64">Base64</option><option value="url">URL</option><option value="html">HTML Entities</option><option value="caesar">Caesar Cipher</option></optgroup><optgroup label="One-Way Hashing"><option value="md5">MD5</option><option value="sha1">SHA-1</option><option value="sha256">SHA-256</option><option value="sha512">SHA-512</option></optgroup><optgroup label="Self-Inverting"><option value="rot13">ROT13 Cipher</option></optgroup></select></div><div id="action-container" class="flex items-center gap-4 p-2.5 bg-slate-800/80 rounded-lg"><label class="flex items-center cursor-pointer"><input type="radio" name="action" value="encode" class="form-radio h-4 w-4 bg-slate-600 border-slate-500 radio-encode" checked><span class="ml-2 text-sky-400 font-semibold">Encode</span></label><label class="flex items-center cursor-pointer"><input type="radio" name="action" value="decode" class="form-radio h-4 w-4 bg-slate-600 border-slate-500 radio-decode"><span class="ml-2 text-violet-400 font-semibold">Decode</span></label></div></div><div id="caesar-shift-container" class="hidden text-center w-full mt-4"><label for="caesar-shift" class="font-semibold text-lg mr-2">Shift Value (1-25):</label><input type="number" id="caesar-shift" value="3" min="1" max="25" class="bg-slate-800 border border-slate-600 rounded-lg p-2 w-24 text-center"></div></div><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="glass-card p-6 rounded-xl shadow-lg"><h2 class="text-2xl font-semibold mb-4 text-sky-400">Input</h2><textarea id="inputText" class="w-full h-64 sm:h-80 bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 resize-none transition-colors" placeholder="Yahan apna text daalo..."></textarea></div><div class="glass-card p-6 rounded-xl shadow-lg"><div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-semibold text-violet-400">Output</h2><button id="copyButton" class="bg-violet-600 hover:bg-violet-700 text-white font-bold py-2 px-4 rounded-lg transition duration-200">Copy</button></div><textarea id="outputText" class="w-full h-64 sm:h-80 bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none resize-none" readonly placeholder="Result yahan dikhega..."></textarea></div></div></div>
+            <div id="encoder" class="tab-content active"><div class="glass-card p-4 rounded-xl mb-6 flex flex-col items-center space-y-4"><div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full flex-wrap"><div class="flex items-center gap-2"><label for="algorithm" class="font-semibold text-lg text-blue-400">Algorithm:</label><select id="algorithm" class="bg-slate-800 border border-slate-600 text-white text-md rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 block p-2.5"><optgroup label="Two-Way Operations"><option value="base64">Base64</option><option value="url">URL</option><option value="html">HTML Entities</option><option value="caesar">Caesar Cipher</option></optgroup><optgroup label="One-Way Hashing"><option value="md5">MD5</option><option value="sha1">SHA-1</option><option value="sha256">SHA-256</option><option value="sha512">SHA-512</option></optgroup><optgroup label="Self-Inverting"><option value="rot13">ROT13 Cipher</option></optgroup></select></div><div id="action-container" class="flex items-center gap-4 p-2.5 bg-slate-800/80 rounded-lg"><label class="flex items-center cursor-pointer"><input type="radio" name="action" value="encode" class="form-radio h-4 w-4 bg-slate-600 border-slate-500" checked><span class="ml-2 text-blue-400 font-semibold">Encode</span></label><label class="flex items-center cursor-pointer"><input type="radio" name="action" value="decode" class="form-radio h-4 w-4 bg-slate-600 border-slate-500"><span class="ml-2 text-blue-400 font-semibold">Decode</span></label></div></div><div id="caesar-shift-container" class="hidden text-center w-full mt-4"><label for="caesar-shift" class="font-semibold text-lg mr-2 text-blue-400">Shift Value:</label><input type="number" id="caesar-shift" value="3" min="1" max="25" class="bg-slate-800 border border-slate-600 rounded-lg p-2 w-24 text-center"></div></div><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="glass-card p-6 rounded-xl"><h2 class="text-2xl font-semibold mb-4 text-blue-400">Input</h2><textarea id="inputText" class="w-full h-64 sm:h-80 bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-colors" placeholder="Yahan apna text daalo..."></textarea></div><div class="glass-card p-6 rounded-xl"><div class="flex justify-between items-center mb-4"><h2 class="text-2xl font-semibold text-blue-400">Output</h2><button id="copyButton" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg action-btn">Copy</button></div><textarea id="outputText" class="w-full h-64 sm:h-80 bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none resize-none" readonly placeholder="Result yahan dikhega..."></textarea></div></div></div>
             
             <!-- JWT Inspector Tab -->
-            <div id="jwt" class="tab-content"><div class="glass-card p-6 rounded-xl shadow-lg"><h2 class="text-2xl font-semibold mb-4 text-sky-400">JWT Input</h2><textarea id="jwtInput" class="w-full h-32 bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 resize-none transition-colors" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"></textarea></div><div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6"><div class="glass-card p-6 rounded-xl shadow-lg"><h2 class="text-2xl font-semibold mb-4 text-sky-400">Header (Decoded)</h2><textarea id="jwtHeaderOutput" class="w-full h-48 bg-slate-900 border-2 border-slate-700 rounded-md p-3 resize-none" readonly></textarea></div><div class="glass-card p-6 rounded-xl shadow-lg"><h2 class="text-2xl font-semibold mb-4 text-violet-400">Payload (Decoded)</h2><textarea id="jwtPayloadOutput" class="w-full h-48 bg-slate-900 border-2 border-slate-700 rounded-md p-3 resize-none" readonly></textarea></div></div></div>
+            <div id="jwt" class="tab-content"><div class="glass-card p-6 rounded-xl"><h2 class="text-2xl font-semibold mb-4 text-blue-400">JWT Input</h2><textarea id="jwtInput" class="w-full h-32 bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-colors" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"></textarea></div><div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6"><div class="glass-card p-6 rounded-xl"><h2 class="text-2xl font-semibold mb-4 text-blue-400">Header (Decoded)</h2><textarea id="jwtHeaderOutput" class="w-full h-48 bg-slate-900 border-2 border-slate-700 rounded-md p-3 resize-none" readonly></textarea></div><div class="glass-card p-6 rounded-xl"><h2 class="text-2xl font-semibold mb-4 text-blue-400">Payload (Decoded)</h2><textarea id="jwtPayloadOutput" class="w-full h-48 bg-slate-900 border-2 border-slate-700 rounded-md p-3 resize-none" readonly></textarea></div></div></div>
             
             <!-- Timestamp Converter Tab -->
-            <div id="timestamp" class="tab-content"><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="glass-card p-6 rounded-xl shadow-lg"><h2 class="text-2xl font-semibold mb-4 text-sky-400">Unix Timestamp to Human Date</h2><label for="unixInput" class="font-semibold mb-2 block">Unix Timestamp (seconds):</label><input id="unixInput" type="number" class="w-full bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors" placeholder="1678886400"><label for="humanOutput" class="font-semibold mt-4 mb-2 block">Result (UTC):</label><input id="humanOutput" type="text" class="w-full bg-slate-900 border-2 border-slate-700 rounded-md p-3" readonly></div><div class="glass-card p-6 rounded-xl shadow-lg"><h2 class="text-2xl font-semibold mb-4 text-violet-400">Human Date to Unix Timestamp</h2><label for="humanInput" class="font-semibold mb-2 block">Date/Time String:</label><input id="humanInput" type="text" class="w-full bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-violet-500 focus:border-violet-500 transition-colors" placeholder="2023-03-15T12:00:00Z"><label for="unixOutput" class="font-semibold mt-4 mb-2 block">Result (Unix Timestamp):</label><input id="unixOutput" type="text" class="w-full bg-slate-900 border-2 border-slate-700 rounded-md p-3" readonly></div></div></div>
+            <div id="timestamp" class="tab-content"><div class="grid grid-cols-1 md:grid-cols-2 gap-6"><div class="glass-card p-6 rounded-xl"><h2 class="text-2xl font-semibold mb-4 text-blue-400">Unix Timestamp to Human Date</h2><label for="unixInput" class="font-semibold mb-2 block">Unix Timestamp (seconds):</label><input id="unixInput" type="number" class="w-full bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="1678886400"><label for="humanOutput" class="font-semibold mt-4 mb-2 block">Result (UTC):</label><input id="humanOutput" type="text" class="w-full bg-slate-900 border-2 border-slate-700 rounded-md p-3" readonly></div><div class="glass-card p-6 rounded-xl"><h2 class="text-2xl font-semibold mb-4 text-blue-400">Human Date to Unix Timestamp</h2><label for="humanInput" class="font-semibold mb-2 block">Date/Time String:</label><input id="humanInput" type="text" class="w-full bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="2023-03-15T12:00:00Z"><label for="unixOutput" class="font-semibold mt-4 mb-2 block">Result (Unix Timestamp):</label><input id="unixOutput" type="text" class="w-full bg-slate-900 border-2 border-slate-700 rounded-md p-3" readonly></div></div></div>
             
             <!-- URL Parser Tab -->
-            <div id="url-parser" class="tab-content"><div class="glass-card p-6 rounded-xl shadow-lg"><h2 class="text-2xl font-semibold mb-4 text-sky-400">URL to Parse</h2><textarea id="urlInput" class="w-full h-24 bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 resize-none transition-colors" placeholder="https://www.example.com:8080/path/to/page?param1=value1&param2=value2#section"></textarea><div id="urlOutput" class="mt-6 output-table"></div></div></div>
+            <div id="url-parser" class="tab-content"><div class="glass-card p-6 rounded-xl"><h2 class="text-2xl font-semibold mb-4 text-blue-400">URL to Parse</h2><textarea id="urlInput" class="w-full h-24 bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-colors" placeholder="https://www.example.com:8080/path/to/page?param1=value1&param2=value2#section"></textarea><div id="urlOutput" class="mt-6 output-table"></div></div></div>
             
             <!-- IP Subnet Calculator Tab -->
-            <div id="ip-subnet" class="tab-content"><div class="glass-card p-6 rounded-xl shadow-lg"><h2 class="text-2xl font-semibold mb-4 text-sky-400">IP Subnet Calculator</h2><label for="ipInput" class="font-semibold mb-2 block">IP Address with CIDR</label><input id="ipInput" type="text" class="w-full bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors" placeholder="192.168.1.10/24"><div id="ipOutput" class="mt-6 output-table"></div></div></div>
+            <div id="ip-subnet" class="tab-content"><div class="glass-card p-6 rounded-xl"><h2 class="text-2xl font-semibold mb-4 text-blue-400">IP Subnet Calculator</h2><label for="ipInput" class="font-semibold mb-2 block">IP Address with CIDR</label><input id="ipInput" type="text" class="w-full bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="192.168.1.10/24"><div id="ipOutput" class="mt-6 output-table"></div></div></div>
 
             <!-- DNS Lookup Tab -->
-            <div id="dns-lookup" class="tab-content"><div class="glass-card p-6 rounded-xl shadow-lg"><h2 class="text-2xl font-semibold mb-4 text-sky-400">DNS Lookup</h2><div class="flex flex-col sm:flex-row gap-4 items-center"><input id="dnsDomainInput" type="text" class="w-full bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-colors" placeholder="example.com"><select id="dnsTypeSelect" class="bg-slate-800 border border-slate-600 text-white rounded-lg p-3"><option>A</option><option>AAAA</option><option>MX</option><option>TXT</option><option>CNAME</option><option>NS</option></select><button id="dnsLookupBtn" class="w-full sm:w-auto bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-6 rounded-lg transition">Lookup</button></div><div id="dnsOutput" class="w-full mt-6 output-table"></div></div></div>
+            <div id="dns-lookup" class="tab-content"><div class="glass-card p-6 rounded-xl"><h2 class="text-2xl font-semibold mb-4 text-blue-400">DNS Lookup</h2><div class="flex flex-col sm:flex-row gap-4 items-center"><input id="dnsDomainInput" type="text" class="w-full bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="example.com"><select id="dnsTypeSelect" class="bg-slate-800 border border-slate-600 text-white rounded-lg p-3"><option>A</option><option>AAAA</option><option>MX</option><option>TXT</option><option>CNAME</option><option>NS</option></select><button id="dnsLookupBtn" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg action-btn">Lookup</button></div><div id="dnsOutput" class="w-full mt-6 output-table"></div></div></div>
 
             <!-- EXIF Viewer Tab -->
-            <div id="exif-viewer" class="tab-content"><div class="glass-card p-6 rounded-xl shadow-lg"><h2 class="text-2xl font-semibold mb-4 text-sky-400">EXIF Data Viewer</h2><div id="file-drop-zone" class="w-full p-8 text-center rounded-lg cursor-pointer transition"><input type="file" id="exifFileInput" class="hidden" accept="image/jpeg, image/png"><svg class="mx-auto h-12 w-12 text-slate-500" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true"><path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg><p class="mt-2 text-slate-400">Drag & drop an image here, or click to select</p><p class="text-xs text-slate-500">JPEG/PNG files are supported</p></div><div id="exifOutput" class="mt-6 output-table"></div></div></div>
+            <div id="exif-viewer" class="tab-content"><div class="glass-card p-6 rounded-xl"><h2 class="text-2xl font-semibold mb-4 text-blue-400">EXIF Data Viewer</h2><div id="file-drop-zone" class="w-full p-8 text-center rounded-lg cursor-pointer transition"><input type="file" id="exifFileInput" class="hidden" accept="image/jpeg, image/png"><svg class="mx-auto h-12 w-12 text-slate-500" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true"><path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg><p class="mt-2 text-slate-400">Drag & drop an image here, or click to select</p><p class="text-xs text-slate-500">JPEG/PNG files are supported</p></div><div id="exifOutput" class="mt-6 output-table"></div></div></div>
         </main>
         
         <div id="toast" class="fixed bottom-10 right-10 bg-green-500 text-white py-2 px-4 rounded-lg shadow-lg opacity-0 transform translate-y-4 transition-all duration-300">Copied to clipboard!</div>
@@ -308,7 +312,7 @@
                     p += `<tr><td class="key">${k}</td><td class="value">${v}</td></tr>`;
                 });
                 const mainDetails = `<table><tbody><tr><td class="key">Protocol</td><td class="value">${t.protocol}</td></tr><tr><td class="key">Hostname</td><td class="value">${t.hostname}</td></tr><tr><td class="key">Port</td><td class="value">${t.port || '(default)'}</td></tr><tr><td class="key">Pathname</td><td class="value">${t.pathname}</td></tr><tr><td class="key">Hash</td><td class="value">${t.hash || '(none)'}</td></tr></tbody></table>`;
-                urlOutput.innerHTML = mainDetails + (p ? `<h3 class="text-xl font-semibold mt-6 mb-2 text-violet-400">Query Parameters</h3><table><tbody>${p}</tbody></table>` : '');
+                urlOutput.innerHTML = mainDetails + (p ? `<h3 class="text-xl font-semibold mt-6 mb-2 text-blue-400">Query Parameters</h3><table><tbody>${p}</tbody></table>` : '');
             } catch (e) {
                 urlOutput.innerHTML = `<p class="text-red-400">Error: Invalid URL.</p>`;
             }
