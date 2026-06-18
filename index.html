@@ -1,1016 +1,807 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cyber Decoder Ring</title>
+    <title>Krysha's Cyber Toolkit for Shiva</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    
     <!-- External Libraries -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/exif-js"></script>
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-    
-    <!-- Internal Styles -->
-           <style>
-        /* ==============================================
-        ===== PROJECT: NEON NOIR THEME by Krysha =====
-        ==============================================
-        Version: 1.0 (Professional)
-        Created for: Shiva (Security Engineer)
-        Description: A sophisticated, dark theme with 
-                     neon accents and professional UI/UX enhancements.
-        */
 
-        /* ===== 1. CSS Variables (Theme ka Control Panel) ===== */
-        :root {
-            --color-background: #0d0c1d; /* Gehra Indigo */
-            --color-primary: #00f5c3; /* Neon Teal */
-            --color-secondary: #ad5389; /* Faded Magenta for glows */
-            --color-text-primary: #e0e6f1;
-            --color-text-secondary: #a8b2d1;
-            --color-surface: rgba(23, 22, 45, 0.6); /* Glass Card ka background */
-            --color-border: rgba(0, 245, 195, 0.2);
-            --font-primary: 'Inter', sans-serif;
-            --font-mono: 'Roboto Mono', monospace;
-            --shadow-glow: 0 0 15px rgba(0, 245, 195, 0.4), 0 0 25px rgba(0, 245, 195, 0.2);
+    <!-- Tailwind Config for Custom Cyberpunk/Neon Noir Theme -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        dark: {
+                            900: '#09090b', // Deepest background
+                            800: '#18181b', // Sidebar/Card background
+                            700: '#27272a', // Borders
+                            600: '#3f3f46', // Lighter borders
+                        },
+                        neon: {
+                            cyan: '#06b6d4',
+                            purple: '#8b5cf6',
+                            green: '#10b981',
+                            pink: '#ec4899'
+                        }
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #27272a 1px, transparent 1px), linear-gradient(to bottom, #27272a 1px, transparent 1px)",
+                    }
+                }
+            }
         }
+    </script>
 
-        /* ===== 2. General Body & Custom Scrollbar ===== */
-        body {
-            font-family: var(--font-primary);
-            background-color: var(--color-background);
-            background-image: 
-                /* Dynamic Aurora Glow */
-                radial-gradient(ellipse 50% 80% at 20% 40%, rgba(173, 83, 137, 0.2), transparent),
-                radial-gradient(ellipse 50% 80% at 80% 50%, rgba(0, 245, 195, 0.15), transparent),
-                /* Subtle Grid Pattern */
-                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 100% 100%, 100% 100%, 20px 20px, 20px 20px;
-            color: var(--color-text-primary);
-            animation: background-pan 20s linear infinite;
-            overflow-x: hidden;
-        }
+    <style>
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #09090b; }
+        ::-webkit-scrollbar-thumb { background: #3f3f46; border-radius: 4px; border: 2px solid #09090b; }
+        ::-webkit-scrollbar-thumb:hover { background: #06b6d4; }
 
-        /* Yeh hai apna custom scrollbar ka jaadu */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb {
-            background-color: var(--color-primary);
-            border-radius: 10px;
-            border: 2px solid var(--color-background);
-        }
-        ::-webkit-scrollbar-thumb:hover { background-color: #00ffd5; }
-
-
-        /* ===== 3. Typography & Text Styles ===== */
-        h1, h2, .output-table .key, textarea, input[type="text"], input[type="number"] {
-            font-family: var(--font-mono);
-        }
-        
-        /* Gradient text ab aur bhi smooth hai */
-        .gradient-text { 
-            background: linear-gradient(90deg, var(--color-secondary), var(--color-primary), var(--color-secondary)); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent;
-            background-size: 200% auto;
-            animation: shimmer 5s linear infinite;
-            text-shadow: 0 0 10px rgba(0, 245, 195, 0.2);
-        }
-
-        /* ===== 4. Glass Card & Layout Styling ===== */
-        .glass-card {
-            background: var(--color-surface);
-            backdrop-filter: blur(12px) saturate(150%);
-            -webkit-backdrop-filter: blur(12px) saturate(150%);
-            border: 1px solid var(--color-border);
-            border-radius: 16px; /* Thode aur rounded corners */
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease;
-        }
-
-        /* ===== 5. Interactive Elements (Tabs, Buttons, Inputs) ===== */
-        input[type="radio"]:checked { background-color: var(--color-primary); }
-        input[type="radio"]:disabled { cursor: not-allowed; opacity: 0.5; }
-
-        .tab-button { 
-            padding: 0.75rem 1.25rem; 
-            cursor: pointer; 
-            border: none; 
-            background: none; 
-            color: var(--color-text-secondary); 
-            font-weight: 600; 
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            border-bottom: 3px solid transparent; 
-            white-space: nowrap; 
-            display: flex; 
-            align-items: center; 
-            gap: 0.5rem;
-            position: relative;
-        }
-        .tab-button:hover { 
-            color: var(--color-text-primary);
-            transform: translateY(-2px);
-        }
-        .tab-button.active { 
-            color: var(--color-primary); 
-            border-bottom-color: var(--color-primary); 
-            text-shadow: 0 0 5px var(--color-primary);
-        }
-        .tab-button svg { width: 1.25rem; height: 1.25rem; }
-        
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: slideInUp 0.6s cubic-bezier(0.165, 0.84, 0.44, 1); }
-
-        .action-btn { 
-            transition: all 0.3s ease; 
-            border: 1px solid var(--color-border);
-        }
-        .action-btn:hover {
-            transform: scale(1.05) translateY(-3px);
-            box-shadow: var(--shadow-glow);
-            background-color: var(--color-primary);
-            color: #000;
-        }
-        .action-btn:active {
-            transform: scale(0.98) translateY(-1px);
-        }
-
-        /* Input fields ka focus state */
-        textarea:focus, input[type="text"]:focus, input[type="number"]:focus {
-            outline: none;
-            box-shadow: var(--shadow-glow);
-            border-color: var(--color-primary) !important;
-        }
-
-        #file-drop-zone { 
-            border: 2px dashed var(--color-border);
-            transition: all 0.3s ease;
-        }
-        #file-drop-zone.dragover { 
-            border-color: var(--color-primary); 
-            background-color: rgba(0, 245, 195, 0.05);
-            box-shadow: inset 0 0 20px rgba(0, 245, 195, 0.2);
-        }
-        
-        /* ===== 6. BONUS: CSS-Only Tooltips ===== */
-        .tooltip-container {
-            position: relative;
-            display: inline-block;
-        }
-        [data-tooltip]::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: 125%;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: #111029;
-            color: var(--color-primary);
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-size: 0.8rem;
-            white-space: nowrap;
+        /* Smooth tab transitions */
+        .tab-content { 
+            display: none; 
             opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-            pointer-events: none;
-            z-index: 10;
-            border: 1px solid var(--color-border);
+            transform: translateY(10px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
         }
-        [data-tooltip]:hover::after {
+        .tab-content.active { 
+            display: block; 
             opacity: 1;
-            visibility: visible;
+            transform: translateY(0);
         }
 
-        /* ===== 7. Table Styling ===== */
-        .output-table table { width: 100%; text-align: left; border-collapse: collapse; }
-        .output-table th, .output-table td { 
-            padding: 1rem; 
-            border: 1px solid rgba(0, 245, 195, 0.1); 
+        /* Gradient Text */
+        .gradient-text {
+            background: linear-gradient(to right, #06b6d4, #8b5cf6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .output-table tr:nth-child(even) { background-color: rgba(0, 245, 195, 0.03); }
-        .output-table .value { word-break: break-all; font-family: var(--font-primary); }
-        .output-table .key { color: var(--color-primary); }
 
-        /* ===== 8. Animations ===== */
-        @keyframes shimmer {
-            to { background-position: -200% center; }
+        /* Grid Background overlay */
+        .bg-grid {
+            background-size: 40px 40px;
+            mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
+            -webkit-mask-image: linear-gradient(to bottom, transparent, black 10%, black 90%, transparent);
         }
-        @keyframes slideInUp { 
-            from { opacity: 0; transform: translateY(20px); } 
-            to { opacity: 1; transform: translateY(0); } 
+
+        /* Custom Input Focus Glow */
+        .cyber-input {
+            transition: all 0.2s ease-in-out;
         }
-        @keyframes background-pan {
-            0% { background-position: 0% 0%, 0% 0%, 0 0, 0 0; }
-            100% { background-position: 100% 100%, -100% -100%, 0 0, 0 0; }
+        .cyber-input:focus {
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.15);
         }
+
+        /* Table styling */
+        .output-table table { width: 100%; border-collapse: separate; border-spacing: 0; border-radius: 8px; overflow: hidden; border: 1px solid #27272a; }
+        .output-table th, .output-table td { padding: 0.75rem 1rem; border-bottom: 1px solid #27272a; text-align: left; }
+        .output-table th { background-color: #18181b; color: #a1a1aa; font-weight: 500; }
+        .output-table tr:last-child td { border-bottom: none; }
+        .output-table td.key { color: #06b6d4; font-weight: 600; width: 30%; }
+        .output-table td.value { color: #e4e4e7; font-family: 'JetBrains Mono', monospace; word-break: break-all; }
+        .output-table tr:hover { background-color: rgba(255, 255, 255, 0.02); }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-300 min-h-screen p-4 sm:p-6 md:p-8">
+<body class="bg-dark-900 text-zinc-300 font-sans h-screen flex overflow-hidden antialiased selection:bg-neon-cyan selection:text-black relative">
 
-    <!-- Main Container -->
-    <div class="w-full max-w-7xl mx-auto h-[calc(100vh-2rem)] sm:h-[calc(100vh-4rem)] flex flex-col z-10">
+    <!-- Subtle Background Grid -->
+    <div class="absolute inset-0 bg-grid-pattern bg-grid opacity-[0.03] pointer-events-none"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-64 bg-dark-800 border-r border-dark-700 flex flex-col h-full z-10 shrink-0 hidden md:flex shadow-2xl shadow-black">
+        <div class="p-6 border-b border-dark-700">
+            <h1 class="text-2xl font-bold tracking-tight text-white flex items-center gap-2">
+                <svg class="w-6 h-6 text-neon-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"></path></svg>
+                Cyber<span class="gradient-text">Toolkit</span>
+            </h1>
+            <p class="text-xs text-zinc-500 mt-1 font-mono">v2.0 // Configured for Shiva</p>
+        </div>
         
-        <!-- Header Section -->
-        <header class="text-center mb-6 shrink-0">
-            <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold gradient-text">Hack It ▸ Crack It ▸ Secure It</h1>
-            <p class="text-slate-400 mt-2 text-sm sm:text-base">Developed by Mr Vk</p>
-        </header>
-
-        <!-- Tab Navigation -->
-        <div class="border-b border-blue-900/50 mb-6 shrink-0">
-            <div class="flex overflow-x-auto">
-                <button class="tab-button active" data-tab="encoder"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h13.5m0-13.5L21 7.5m0 0L16.5 12M21 7.5H7.5" /></svg>Encoder/Decoder</button>
-                <button class="tab-button" data-tab="js-scraper"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75c0 8.284-6.716 15-15 15m15-15v15m0-15H9.75m7.5 0c0 4.418-3.358 8-7.5 8s-7.5-3.582-7.5-8" /></svg>JS Scraper</button>
-                <button class="tab-button" data-tab="data-analyzer"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.898 20.572L16.5 21.75l-.398-1.178a3.375 3.375 0 00-2.455-2.456L12.75 18l1.178-.398a3.375 3.375 0 002.455-2.456L16.5 14.25l.398 1.178a3.375 3.375 0 002.456 2.456L20.25 18l-1.178.398a3.375 3.375 0 00-2.456 2.456z" /></svg>Data Analyzer</button>
-                <button class="tab-button" data-tab="subdomain-finder"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607zM10.5 7.5v6m3-3h-6" /></svg>Subdomain Finder</button>
-                <button class="tab-button" data-tab="security-headers"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.286zm0 13.036h.008v.008h-.008v-.008z" /></svg>Security Headers</button>
-                <button class="tab-button" data-tab="jwt"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 5.25a3 3 0 013 3m3 0a6 6 0 01-7.029 5.912c-.563-.097-1.159.026-1.563.43L10.5 17.25H8.25v2.25H6v2.25H2.25v-2.818c0-.597.237-1.17.659-1.591l6.499-6.499c.404-.404.527-1 .43-1.563A6 6 0 1121.75 8.25z" /></svg>JWT Inspector</button>
-                <button class="tab-button" data-tab="timestamp"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>Timestamp</button>
-                <button class="tab-button" data-tab="url-parser"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" /></svg>URL Parser</button>
-                <button class="tab-button" data-tab="ip-subnet"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" /></svg>IP Subnet</button>
-                <button class="tab-button" data-tab="dns-lookup"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21.75c5.385 0 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25 2.25 6.615 2.25 12s4.365 9.75 9.75 9.75z" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 8.25v6.75" /><path stroke-linecap="round" stroke-linejoin="round" d="M12 15.75h.008v.008H12v-.008z" /></svg>DNS Lookup</button>
-                <button class="tab-button" data-tab="exif-viewer"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.776 48.776 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z" /><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0zM18.75 10.5h.008v.008h-.008V10.5z" /></svg>EXIF Viewer</button>
-            </div>
+        <div class="flex-1 overflow-y-auto py-4 px-3 space-y-1 custom-scrollbar" id="nav-container">
+            <!-- Nav Items generated by JS to keep HTML clean -->
         </div>
 
-        <!-- Main Content Area -->
-        <main class="flex-grow overflow-y-auto pr-2">
+        <div class="p-4 border-t border-dark-700 text-xs text-zinc-500 text-center flex items-center justify-center gap-2">
+            Designed by Krysha 💖
+        </div>
+    </aside>
+
+    <!-- Mobile Header (Visible only on small screens) -->
+    <div class="md:hidden flex items-center justify-between p-4 bg-dark-800 border-b border-dark-700 fixed top-0 w-full z-50">
+        <h1 class="text-xl font-bold gradient-text">CyberToolkit</h1>
+        <select id="mobile-nav" class="bg-dark-900 border border-dark-700 rounded-md text-sm p-2 text-zinc-300 focus:outline-none focus:border-neon-cyan"></select>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 h-full overflow-y-auto relative z-0 md:pt-0 pt-16">
+        <div class="max-w-6xl mx-auto p-6 md:p-10">
             
             <!-- Encoder/Decoder Tab -->
             <div id="encoder" class="tab-content active">
-                <div class="glass-card p-4 rounded-xl mb-6 flex flex-col items-center space-y-4">
-                    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 w-full flex-wrap">
-                        <div class="flex items-center gap-2">
-                            <label for="algorithm" class="font-semibold text-lg text-blue-400">Algorithm:</label>
-                            <select id="algorithm" class="bg-slate-800 border border-slate-600 text-white text-md rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 block p-2.5">
-                                <optgroup label="Two-Way Operations"><option value="base64">Base64</option><option value="url">URL</option><option value="html">HTML Entities</option><option value="caesar">Caesar Cipher</option></optgroup>
-                                <optgroup label="One-Way Hashing"><option value="md5">MD5</option><option value="sha1">SHA-1</option><option value="sha256">SHA-256</option><option value="sha512">SHA-512</option></optgroup>
-                                <optgroup label="Self-Inverting"><option value="rot13">ROT13 Cipher</option></optgroup>
-                            </select>
-                        </div>
-                        <div id="action-container" class="flex items-center gap-4 p-2.5 bg-slate-800/80 rounded-lg">
-                            <label class="flex items-center cursor-pointer"><input type="radio" name="action" value="encode" class="form-radio h-4 w-4 bg-slate-600 border-slate-500" checked><span class="ml-2 text-blue-400 font-semibold">Encode</span></label>
-                            <label class="flex items-center cursor-pointer"><input type="radio" name="action" value="decode" class="form-radio h-4 w-4 bg-slate-600 border-slate-500"><span class="ml-2 text-blue-400 font-semibold">Decode</span></label>
+                <header class="mb-8">
+                    <h2 class="text-3xl font-bold text-white mb-2">Encoder / Decoder</h2>
+                    <p class="text-zinc-400">Translate data between multiple formats and ciphers.</p>
+                </header>
+
+                <div class="bg-dark-800 border border-dark-700 rounded-xl p-5 mb-6 flex flex-col md:flex-row items-center gap-6 shadow-lg shadow-black/20">
+                    <div class="flex-1 w-full">
+                        <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Algorithm</label>
+                        <select id="algorithm" class="w-full bg-dark-900 border border-dark-600 text-white text-sm rounded-lg focus:ring-1 focus:ring-neon-cyan focus:border-neon-cyan p-3 outline-none cyber-input">
+                            <optgroup label="Two-Way Operations">
+                                <option value="base64">Base64</option>
+                                <option value="url">URL Encoding</option>
+                                <option value="html">HTML Entities</option>
+                                <option value="caesar">Caesar Cipher</option>
+                            </optgroup>
+                            <optgroup label="One-Way Hashing">
+                                <option value="md5">MD5</option>
+                                <option value="sha1">SHA-1</option>
+                                <option value="sha256">SHA-256</option>
+                                <option value="sha512">SHA-512</option>
+                            </optgroup>
+                            <optgroup label="Self-Inverting">
+                                <option value="rot13">ROT13 Cipher</option>
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <div id="action-container" class="flex-shrink-0 w-full md:w-auto">
+                        <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Action</label>
+                        <div class="flex bg-dark-900 border border-dark-600 rounded-lg p-1">
+                            <label class="cursor-pointer flex-1 text-center relative">
+                                <input type="radio" name="action" value="encode" class="peer sr-only" checked>
+                                <span class="block px-6 py-2 text-sm text-zinc-400 peer-checked:bg-dark-700 peer-checked:text-white rounded-md transition-all">Encode</span>
+                            </label>
+                            <label class="cursor-pointer flex-1 text-center relative">
+                                <input type="radio" name="action" value="decode" class="peer sr-only">
+                                <span class="block px-6 py-2 text-sm text-zinc-400 peer-checked:bg-dark-700 peer-checked:text-white rounded-md transition-all">Decode</span>
+                            </label>
                         </div>
                     </div>
-                    <div id="caesar-shift-container" class="hidden text-center w-full mt-4">
-                        <label for="caesar-shift" class="font-semibold text-lg mr-2 text-blue-400">Shift Value:</label>
-                        <input type="number" id="caesar-shift" value="3" min="1" max="25" class="bg-slate-800 border border-slate-600 rounded-lg p-2 w-24 text-center">
+
+                    <div id="caesar-shift-container" class="hidden w-full md:w-auto">
+                        <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Shift</label>
+                        <input type="number" id="caesar-shift" value="3" min="1" max="25" class="w-24 bg-dark-900 border border-dark-600 rounded-lg p-3 text-center text-white focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan outline-none cyber-input">
                     </div>
                 </div>
+
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="glass-card p-6 rounded-xl">
-                        <h2 class="text-2xl font-semibold mb-4 text-blue-400">Input</h2>
-                        <textarea id="inputText" class="w-full h-64 sm:h-80 bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-colors" placeholder="Put Your Input..."></textarea>
+                    <div class="flex flex-col">
+                        <label class="block text-sm font-medium text-neon-cyan mb-2">Input</label>
+                        <textarea id="inputText" class="flex-1 min-h-[300px] w-full bg-dark-800 border border-dark-700 rounded-xl p-4 text-zinc-200 font-mono text-sm focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan outline-none resize-none cyber-input shadow-inner placeholder-zinc-600" placeholder="Paste your payload or text here..."></textarea>
                     </div>
-                    <div class="glass-card p-6 rounded-xl">
-                        <div class="flex justify-between items-center mb-4">
-                            <h2 class="text-2xl font-semibold text-blue-400">Output</h2>
-                            <button id="copyButton" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg action-btn">Copy</button>
+                    <div class="flex flex-col relative">
+                        <div class="flex justify-between items-end mb-2">
+                            <label class="block text-sm font-medium text-neon-purple">Output</label>
+                            <button id="copyButton" class="text-xs bg-dark-700 hover:bg-dark-600 text-white px-3 py-1.5 rounded-md transition-colors flex items-center gap-1 border border-dark-600">
+                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                                Copy
+                            </button>
                         </div>
-                        <textarea id="outputText" class="w-full h-64 sm:h-80 bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none resize-none" readonly placeholder="Result..."></textarea>
+                        <textarea id="outputText" class="flex-1 min-h-[300px] w-full bg-dark-900 border border-dark-700 rounded-xl p-4 text-neon-cyan font-mono text-sm outline-none resize-none shadow-inner" readonly placeholder="Result will appear here..."></textarea>
                     </div>
                 </div>
             </div>
 
             <!-- JS Scraper Tab -->
             <div id="js-scraper" class="tab-content">
-                <div class="glass-card p-6 rounded-xl">
-                     <h2 class="text-2xl font-semibold mb-4 text-blue-400">JS File Scraper & Endpoint Extractor</h2>
-                    <p class="text-slate-400 mb-4">Enter a URL to fetch its HTML, find all linked JavaScript files, and scan them for potential endpoints and secrets.</p>
-                    <div class="flex flex-col sm:flex-row gap-4 items-center">
-                        <input id="jsUrlInput" type="text" class="w-full bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="https://example.com">
-                        <button id="jsScrapeBtn" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg action-btn">Scrape</button>
+                <header class="mb-8">
+                    <h2 class="text-3xl font-bold text-white mb-2">JS Scraper & Secrets</h2>
+                    <p class="text-zinc-400">Extract endpoints, APIs, and leaked secrets from external JavaScript files.</p>
+                </header>
+
+                <div class="bg-dark-800 border border-dark-700 rounded-xl p-6 mb-6">
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <div class="relative flex-1">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <svg class="h-5 w-5 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"></path></svg>
+                            </div>
+                            <input id="jsUrlInput" type="text" class="w-full bg-dark-900 border border-dark-600 rounded-lg pl-11 pr-4 py-3 text-white focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan outline-none cyber-input" placeholder="https://target.com">
+                        </div>
+                        <button id="jsScrapeBtn" class="bg-neon-cyan hover:bg-cyan-400 text-black font-bold py-3 px-8 rounded-lg transition-all shadow-[0_0_15px_rgba(6,182,212,0.3)] hover:shadow-[0_0_25px_rgba(6,182,212,0.5)] whitespace-nowrap flex items-center justify-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                            Initiate Scan
+                        </button>
                     </div>
                 </div>
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mt-6">
-                    <div class="glass-card p-6 rounded-xl lg:col-span-1">
-                         <h2 class="text-2xl font-semibold mb-4 text-blue-400">JS Files Found</h2>
-                         <div id="jsFilesList" class="h-96 overflow-y-auto space-y-2"></div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[500px]">
+                    <div class="bg-dark-800 border border-dark-700 rounded-xl flex flex-col overflow-hidden">
+                        <div class="p-4 border-b border-dark-700 bg-dark-900/50">
+                            <h3 class="font-semibold text-white flex items-center gap-2">
+                                <svg class="w-4 h-4 text-zinc-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                                Files Found
+                            </h3>
+                        </div>
+                        <div id="jsFilesList" class="flex-1 p-4 overflow-y-auto custom-scrollbar space-y-2 bg-dark-900/20 font-mono text-xs">
+                            <p class="text-zinc-500 italic text-center mt-10">Awaiting target URL...</p>
+                        </div>
                     </div>
-                    <div class="glass-card p-6 rounded-xl lg:col-span-2">
-                        <h2 class="text-2xl font-semibold mb-4 text-blue-400">Extracted Information</h2>
-                        <div id="jsResultsOutput" class="h-96 overflow-y-auto space-y-4"></div>
+                    
+                    <div class="lg:col-span-2 bg-dark-800 border border-dark-700 rounded-xl flex flex-col overflow-hidden">
+                        <div class="p-4 border-b border-dark-700 bg-dark-900/50">
+                            <h3 class="font-semibold text-white flex items-center gap-2">
+                                <svg class="w-4 h-4 text-neon-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                                Extracted Artifacts
+                            </h3>
+                        </div>
+                        <div id="jsResultsOutput" class="flex-1 p-4 overflow-y-auto custom-scrollbar space-y-4 bg-dark-900/20">
+                            <p class="text-zinc-500 italic text-center mt-10">Scan results will populate here.</p>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Data Analyzer Tab -->
             <div id="data-analyzer" class="tab-content">
-                <div class="glass-card p-6 rounded-xl">
-                    <h2 class="text-2xl font-semibold mb-4 text-blue-400">Data Analyzer</h2>
-                    <p class="text-slate-400 mb-4">Paste any hash or encoded string to automatically detect its potential format(s).</p>
-                    <textarea id="analyzerInput" class="w-full h-24 bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-colors" placeholder="Paste data here... e.g., eyJhbGciOiJIUzI1NiJ9..."></textarea>
-                    <button id="analyzerBtn" class="w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg action-btn">Analyze Data</button>
-                    <div id="analyzerOutput" class="mt-6 p-4 bg-slate-900 rounded-md min-h-[8rem] font-mono"></div>
+                <header class="mb-8">
+                    <h2 class="text-3xl font-bold text-white mb-2">Hash & Format Identifier</h2>
+                    <p class="text-zinc-400">Paste any unknown string, hash, or token to detect its signature.</p>
+                </header>
+
+                <div class="bg-dark-800 border border-dark-700 rounded-xl p-6 shadow-lg">
+                    <textarea id="analyzerInput" class="w-full h-32 bg-dark-900 border border-dark-600 rounded-lg p-4 text-zinc-200 font-mono text-sm focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan outline-none resize-none cyber-input mb-4" placeholder="e.g., eyJhbGciOiJIUzI1NiIsInR..."></textarea>
+                    
+                    <button id="analyzerBtn" class="w-full bg-dark-700 hover:bg-dark-600 text-white border border-dark-600 font-bold py-3 px-6 rounded-lg transition-all flex items-center justify-center gap-2">
+                        <svg class="w-5 h-5 text-neon-green" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                        Analyze Data Signature
+                    </button>
+
+                    <div id="analyzerOutput" class="mt-6 p-4 border border-dark-700 bg-dark-900 rounded-lg min-h-[100px] font-mono text-sm text-zinc-300">
+                        <p class="text-zinc-600 italic">Analysis output...</p>
+                    </div>
                 </div>
             </div>
 
             <!-- Subdomain Finder Tab -->
             <div id="subdomain-finder" class="tab-content">
-                <div class="glass-card p-6 rounded-xl">
-                    <h2 class="text-2xl font-semibold mb-4 text-blue-400">Subdomain Finder</h2>
-                    <div class="flex flex-col sm:flex-row gap-4 items-center mb-4">
-                        <input id="subdomainDomainInput" type="text" class="w-full bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="example.com">
-                        <button id="subdomainFindBtn" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg action-btn">Find Subdomains</button>
+                <header class="mb-8">
+                    <h2 class="text-3xl font-bold text-white mb-2">Subdomain Recon</h2>
+                    <p class="text-zinc-400">Query crt.sh and probe endpoints for live status.</p>
+                </header>
+
+                <div class="bg-dark-800 border border-dark-700 rounded-xl p-6 mb-6">
+                    <div class="flex flex-col sm:flex-row gap-4 mb-4">
+                        <div class="relative flex-1">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-zinc-500 font-mono">*.</div>
+                            <input id="subdomainDomainInput" type="text" class="w-full bg-dark-900 border border-dark-600 rounded-lg pl-10 pr-4 py-3 text-white font-mono focus:border-neon-purple focus:ring-1 focus:ring-neon-purple outline-none cyber-input" placeholder="target.com">
+                        </div>
+                        <button id="subdomainFindBtn" class="bg-neon-purple hover:bg-purple-500 text-white font-bold py-3 px-8 rounded-lg transition-all shadow-[0_0_15px_rgba(139,92,246,0.3)] hover:shadow-[0_0_25px_rgba(139,92,246,0.5)] whitespace-nowrap">
+                            Enumerate
+                        </button>
                     </div>
-                    <div id="subdomain-status" class="text-slate-400 mb-4 h-6"></div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                             <div class="flex justify-between items-center mb-2">
-                                <h3 class="text-xl font-semibold text-green-400"> Active Subdomains</h3>
-                                <button id="subdomainDownloadActiveBtn" class="bg-green-600 hover:bg-green-700 text-white font-bold py-1 px-3 rounded-lg action-btn hidden">Download</button>
-                            </div>
-                            <textarea id="subdomainOutputActive" class="w-full h-80 bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none resize-none" readonly></textarea>
+                    <div id="subdomain-status" class="text-xs font-mono text-zinc-500 h-4">Ready for target.</div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 h-[500px]">
+                    <div class="flex flex-col">
+                        <div class="flex justify-between items-center mb-2 px-1">
+                            <h3 class="text-sm font-semibold text-neon-green flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-neon-green animate-pulse"></span>
+                                Live Targets (200/403/404)
+                            </h3>
+                            <button id="subdomainDownloadActiveBtn" class="text-xs bg-dark-700 hover:bg-dark-600 text-white px-2 py-1 rounded transition-colors hidden">TXT</button>
                         </div>
-                        <div>
-                            <div class="flex justify-between items-center mb-2">
-                                <h3 class="text-xl font-semibold text-red-400"> Inactive Subdomains</h3>
-                                <button id="subdomainDownloadAllBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded-lg action-btn hidden">Download All</button>
-                            </div>
-                            <textarea id="subdomainOutputInactive" class="w-full h-80 bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none resize-none" readonly></textarea>
+                        <textarea id="subdomainOutputActive" class="flex-1 w-full bg-dark-900 border border-dark-700 rounded-xl p-4 text-neon-green font-mono text-sm outline-none resize-none shadow-inner" readonly></textarea>
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="flex justify-between items-center mb-2 px-1">
+                            <h3 class="text-sm font-semibold text-zinc-500 flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-zinc-600"></span>
+                                Dead / Unreachable
+                            </h3>
+                            <button id="subdomainDownloadAllBtn" class="text-xs bg-dark-700 hover:bg-dark-600 text-white px-2 py-1 rounded transition-colors hidden">All.TXT</button>
                         </div>
+                        <textarea id="subdomainOutputInactive" class="flex-1 w-full bg-dark-900 border border-dark-700 rounded-xl p-4 text-zinc-500 font-mono text-sm outline-none resize-none shadow-inner" readonly></textarea>
                     </div>
                 </div>
             </div>
 
             <!-- Security Headers Tab -->
             <div id="security-headers" class="tab-content">
-                <div class="glass-card p-6 rounded-xl">
-                    <h2 class="text-2xl font-semibold mb-4 text-blue-400">Security Header Analyzer</h2>
-                    <p class="text-slate-400 mb-4">Enter a full URL (including https://) to check its security headers.</p>
-                    <div class="flex flex-col sm:flex-row gap-4 items-center">
-                        <input id="headerUrlInput" type="text" class="w-full bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="https://example.com">
-                        <button id="headerAnalyzeBtn" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg action-btn">Analyze</button>
+                <header class="mb-8">
+                    <h2 class="text-3xl font-bold text-white mb-2">Header Analyzer</h2>
+                    <p class="text-zinc-400">Validate HTTP security headers against modern best practices.</p>
+                </header>
+
+                <div class="bg-dark-800 border border-dark-700 rounded-xl p-6">
+                    <div class="flex flex-col sm:flex-row gap-4 mb-6">
+                        <input id="headerUrlInput" type="text" class="flex-1 bg-dark-900 border border-dark-600 rounded-lg px-4 py-3 text-white font-mono focus:border-neon-pink focus:ring-1 focus:ring-neon-pink outline-none cyber-input" placeholder="https://target.com">
+                        <button id="headerAnalyzeBtn" class="bg-dark-700 hover:border-neon-pink text-white border border-dark-600 font-bold py-3 px-8 rounded-lg transition-all whitespace-nowrap group">
+                            <span class="group-hover:text-neon-pink transition-colors">Analyze Headers</span>
+                        </button>
                     </div>
-                    <div id="headerOutput" class="mt-6"></div>
-                </div>
-            </div>
-            
-            <!-- JWT Inspector Tab -->
-            <div id="jwt" class="tab-content">
-                <div class="glass-card p-6 rounded-xl">
-                    <h2 class="text-2xl font-semibold mb-4 text-blue-400">JWT Input</h2>
-                    <textarea id="jwtInput" class="w-full h-32 bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-colors" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"></textarea>
-                </div>
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-                    <div class="glass-card p-6 rounded-xl">
-                        <h2 class="text-2xl font-semibold mb-4 text-blue-400">Header (Decoded)</h2>
-                        <textarea id="jwtHeaderOutput" class="w-full h-48 bg-slate-900 border-2 border-slate-700 rounded-md p-3 resize-none" readonly></textarea>
+                    
+                    <div id="headerOutput" class="space-y-6">
+                        <div class="text-center py-10 border border-dark-700 border-dashed rounded-lg bg-dark-900/50 text-zinc-500">
+                            Awaiting URL input to begin header analysis...
+                        </div>
                     </div>
-                    <div class="glass-card p-6 rounded-xl">
-                        <h2 class="text-2xl font-semibold mb-4 text-blue-400">Payload (Decoded)</h2>
-                        <textarea id="jwtPayloadOutput" class="w-full h-48 bg-slate-900 border-2 border-slate-700 rounded-md p-3 resize-none" readonly></textarea>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Timestamp Converter Tab -->
-            <div id="timestamp" class="tab-content">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="glass-card p-6 rounded-xl">
-                        <h2 class="text-2xl font-semibold mb-4 text-blue-400">Unix Timestamp to Human Date</h2>
-                        <label for="unixInput" class="font-semibold mb-2 block">Unix Timestamp (seconds):</label>
-                        <input id="unixInput" type="number" class="w-full bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="1678886400">
-                        <label for="humanOutput" class="font-semibold mt-4 mb-2 block">Result (UTC):</label>
-                        <input id="humanOutput" type="text" class="w-full bg-slate-900 border-2 border-slate-700 rounded-md p-3" readonly>
-                    </div>
-                    <div class="glass-card p-6 rounded-xl">
-                        <h2 class="text-2xl font-semibold mb-4 text-blue-400">Human Date to Unix Timestamp</h2>
-                        <label for="humanInput" class="font-semibold mb-2 block">Date/Time String:</label>
-                        <input id="humanInput" type="text" class="w-full bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="2023-03-15T12:00:00Z">
-                        <label for="unixOutput" class="font-semibold mt-4 mb-2 block">Result (Unix Timestamp):</label>
-                        <input id="unixOutput" type="text" class="w-full bg-slate-900 border-2 border-slate-700 rounded-md p-3" readonly>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- URL Parser Tab -->
-            <div id="url-parser" class="tab-content">
-                <div class="glass-card p-6 rounded-xl">
-                    <h2 class="text-2xl font-semibold mb-4 text-blue-400">URL to Parse</h2>
-                    <textarea id="urlInput" class="w-full h-24 bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-colors" placeholder="https://www.example.com:8080/path/to/page?param1=value1&param2=value2#section"></textarea>
-                    <div id="urlOutput" class="mt-6 output-table"></div>
-                </div>
-            </div>
-            
-            <!-- IP Subnet Calculator Tab -->
-            <div id="ip-subnet" class="tab-content">
-                <div class="glass-card p-6 rounded-xl">
-                    <h2 class="text-2xl font-semibold mb-4 text-blue-400">IP Subnet Calculator</h2>
-                    <label for="ipInput" class="font-semibold mb-2 block">IP Address with CIDR</label>
-                    <input id="ipInput" type="text" class="w-full bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="192.168.1.10/24">
-                    <div id="ipOutput" class="mt-6 output-table"></div>
                 </div>
             </div>
 
-            <!-- DNS Lookup Tab -->
+            <!-- New JSON Formatter Tab -->
+            <div id="json-formatter" class="tab-content">
+                <header class="mb-8 flex justify-between items-end">
+                    <div>
+                        <h2 class="text-3xl font-bold text-white mb-2">JSON Formatter <span class="text-xs bg-neon-purple text-white px-2 py-1 rounded-full align-top ml-2">NEW</span></h2>
+                        <p class="text-zinc-400">Beautify or Minify JSON payloads instantly.</p>
+                    </div>
+                    <div class="flex gap-2">
+                        <button id="jsonFormatBtn" class="text-xs bg-dark-700 hover:bg-dark-600 text-white px-3 py-1.5 rounded-md border border-dark-600">Beautify</button>
+                        <button id="jsonMinifyBtn" class="text-xs bg-dark-700 hover:bg-dark-600 text-white px-3 py-1.5 rounded-md border border-dark-600">Minify</button>
+                    </div>
+                </header>
+
+                <div class="flex flex-col h-[600px]">
+                    <textarea id="jsonInputOutput" class="flex-1 w-full bg-dark-900 border border-dark-700 rounded-xl p-4 text-neon-cyan font-mono text-sm focus:border-neon-cyan focus:ring-1 focus:ring-neon-cyan outline-none resize-none shadow-inner" spellcheck="false" placeholder='{"status": "waiting for json payload..."}'></textarea>
+                    <div id="jsonError" class="text-red-400 text-xs font-mono mt-2 hidden">Invalid JSON!</div>
+                </div>
+            </div>
+
+            <!-- More tools generated dynamically or kept minimal for brevity, mapping the rest structurally -->
+            <div id="jwt" class="tab-content">
+                <header class="mb-8">
+                    <h2 class="text-3xl font-bold text-white mb-2">JWT Inspector</h2>
+                    <p class="text-zinc-400">Decode Base64Url payloads without verifying signatures.</p>
+                </header>
+                <div class="space-y-6">
+                    <div class="bg-dark-800 border border-dark-700 rounded-xl p-6">
+                        <label class="block text-xs font-semibold text-zinc-400 uppercase tracking-wider mb-2">Encoded Token</label>
+                        <textarea id="jwtInput" class="w-full h-24 bg-dark-900 border border-dark-600 rounded-lg p-3 text-white font-mono text-sm outline-none focus:border-neon-cyan cyber-input resize-none" placeholder="eyJhbGci..."></textarea>
+                    </div>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="bg-dark-800 border border-dark-700 rounded-xl p-6">
+                            <label class="block text-xs font-semibold text-neon-pink uppercase tracking-wider mb-2">Header</label>
+                            <textarea id="jwtHeaderOutput" class="w-full h-48 bg-dark-900 border border-dark-700 rounded-lg p-3 text-neon-pink font-mono text-sm outline-none resize-none" readonly></textarea>
+                        </div>
+                        <div class="bg-dark-800 border border-dark-700 rounded-xl p-6">
+                            <label class="block text-xs font-semibold text-neon-cyan uppercase tracking-wider mb-2">Payload</label>
+                            <textarea id="jwtPayloadOutput" class="w-full h-48 bg-dark-900 border border-dark-700 rounded-lg p-3 text-neon-cyan font-mono text-sm outline-none resize-none" readonly></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="timestamp" class="tab-content">
+                <header class="mb-8">
+                    <h2 class="text-3xl font-bold text-white mb-2">Epoch Tools</h2>
+                </header>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-dark-800 border border-dark-700 rounded-xl p-6">
+                        <h3 class="text-lg font-semibold text-white mb-4">Unix to UTC</h3>
+                        <input id="unixInput" type="number" class="w-full bg-dark-900 border border-dark-600 rounded-lg p-3 text-white font-mono outline-none focus:border-neon-cyan cyber-input mb-4" placeholder="e.g. 1678886400">
+                        <input id="humanOutput" type="text" class="w-full bg-dark-900/50 border border-dark-700 rounded-lg p-3 text-neon-cyan font-mono" readonly placeholder="Output...">
+                    </div>
+                    <div class="bg-dark-800 border border-dark-700 rounded-xl p-6">
+                        <h3 class="text-lg font-semibold text-white mb-4">UTC String to Unix</h3>
+                        <input id="humanInput" type="text" class="w-full bg-dark-900 border border-dark-600 rounded-lg p-3 text-white font-mono outline-none focus:border-neon-purple cyber-input mb-4" placeholder="2023-03-15T12:00:00Z">
+                        <input id="unixOutput" type="text" class="w-full bg-dark-900/50 border border-dark-700 rounded-lg p-3 text-neon-purple font-mono" readonly placeholder="Output...">
+                    </div>
+                </div>
+            </div>
+
+            <div id="url-parser" class="tab-content">
+                 <header class="mb-8">
+                    <h2 class="text-3xl font-bold text-white mb-2">URL Parser</h2>
+                </header>
+                <div class="bg-dark-800 border border-dark-700 rounded-xl p-6">
+                    <textarea id="urlInput" class="w-full h-24 bg-dark-900 border border-dark-600 rounded-lg p-4 text-white font-mono outline-none focus:border-neon-cyan cyber-input resize-none mb-6" placeholder="https://example.com/api/v1?user=admin&id=1"></textarea>
+                    <div id="urlOutput" class="output-table"></div>
+                </div>
+            </div>
+
+            <div id="ip-subnet" class="tab-content">
+                <header class="mb-8">
+                    <h2 class="text-3xl font-bold text-white mb-2">CIDR Calculator</h2>
+                </header>
+                <div class="bg-dark-800 border border-dark-700 rounded-xl p-6">
+                    <input id="ipInput" type="text" class="w-full bg-dark-900 border border-dark-600 rounded-lg p-4 text-white font-mono outline-none focus:border-neon-cyan cyber-input mb-6" placeholder="192.168.1.0/24">
+                    <div id="ipOutput" class="output-table"></div>
+                </div>
+            </div>
+
             <div id="dns-lookup" class="tab-content">
-                <div class="glass-card p-6 rounded-xl">
-                    <h2 class="text-2xl font-semibold mb-4 text-blue-400">DNS Lookup</h2>
-                    <div class="flex flex-col sm:flex-row gap-4 items-center">
-                        <input id="dnsDomainInput" type="text" class="w-full bg-slate-900 border-2 border-slate-700 rounded-md p-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors" placeholder="example.com">
-                        <select id="dnsTypeSelect" class="bg-slate-800 border border-slate-600 text-white rounded-lg p-3">
+                 <header class="mb-8">
+                    <h2 class="text-3xl font-bold text-white mb-2">DNS Inspector</h2>
+                </header>
+                <div class="bg-dark-800 border border-dark-700 rounded-xl p-6">
+                    <div class="flex flex-col sm:flex-row gap-4 mb-6">
+                        <input id="dnsDomainInput" type="text" class="flex-1 bg-dark-900 border border-dark-600 rounded-lg p-3 text-white font-mono outline-none focus:border-neon-cyan cyber-input" placeholder="target.com">
+                        <select id="dnsTypeSelect" class="bg-dark-900 border border-dark-600 rounded-lg p-3 text-white font-mono outline-none cyber-input">
                             <option>A</option><option>AAAA</option><option>MX</option><option>TXT</option><option>CNAME</option><option>NS</option>
                         </select>
-                        <button id="dnsLookupBtn" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg action-btn">Lookup</button>
+                        <button id="dnsLookupBtn" class="bg-dark-700 hover:bg-dark-600 text-white border border-dark-600 font-bold py-3 px-6 rounded-lg transition-all">Dig</button>
                     </div>
-                    <div id="dnsOutput" class="w-full mt-6 output-table"></div>
+                    <div id="dnsOutput" class="output-table"></div>
                 </div>
             </div>
 
-            <!-- EXIF Viewer Tab -->
             <div id="exif-viewer" class="tab-content">
-                <div class="glass-card p-6 rounded-xl">
-                    <h2 class="text-2xl font-semibold mb-4 text-blue-400">EXIF Data Viewer</h2>
-                    <div id="file-drop-zone" class="w-full p-8 text-center rounded-lg cursor-pointer transition">
+                <header class="mb-8">
+                    <h2 class="text-3xl font-bold text-white mb-2">EXIF Metadata</h2>
+                </header>
+                <div class="bg-dark-800 border border-dark-700 rounded-xl p-6">
+                    <div id="file-drop-zone" class="w-full py-16 border-2 border-dashed border-dark-600 rounded-xl text-center cursor-pointer hover:border-neon-cyan hover:bg-dark-900/50 transition-all">
                         <input type="file" id="exifFileInput" class="hidden" accept="image/jpeg, image/png">
-                        <svg class="mx-auto h-12 w-12 text-slate-500" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true"><path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                        <p class="mt-2 text-slate-400">Drag & drop an image here, or click to select</p>
-                        <p class="text-xs text-slate-500">JPEG/PNG files are supported</p>
+                        <svg class="mx-auto h-12 w-12 text-zinc-500 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+                        <p class="text-zinc-400 font-medium">Click or drag image here</p>
+                        <p class="text-xs text-zinc-500 mt-2">JPEG/PNG only. Processed locally in browser.</p>
                     </div>
                     <div id="exifOutput" class="mt-6 output-table"></div>
                 </div>
             </div>
-        </main>
-        
-        <!-- Toast Notification -->
-        <div id="toast" class="fixed bottom-10 right-10 bg-green-500 text-white py-2 px-4 rounded-lg shadow-lg opacity-0 transform translate-y-4 transition-all duration-300">Copied to clipboard!</div>
+
+        </div>
+    </main>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-neon-green text-black font-semibold py-3 px-6 rounded-lg shadow-[0_0_20px_rgba(16,185,129,0.3)] transform translate-y-20 opacity-0 transition-all duration-300 z-50 flex items-center gap-2">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        Copied to clipboard!
     </div>
 
-    <!-- Main Application Script -->
+    <!-- Scripting -->
     <script>
-    /**
-     * Main function to initialize the application after the DOM is loaded.
-     */
-    document.addEventListener('DOMContentLoaded', () => {
-        // Initialize all modules
-        setupTabNavigation();
-        setupToast();
-        setupEncoder();
-        setupJsScraper();
-        setupDataAnalyzer();
-        setupSubdomainFinder();
-        setupSecurityHeaders();
-        setupJWT();
-        setupTimestamp();
-        setupURLParser();
-        setupIPCalculator();
-        setupDNSLookup();
-        setupEXIFViewer();
-    });
-
-    /**
-     * Sets up the tab switching functionality.
-     */
-    function setupTabNavigation() {
-        const tabButtons = document.querySelectorAll('.tab-button');
-        const tabContents = document.querySelectorAll('.tab-content');
-        tabButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                tabButtons.forEach(btn => btn.classList.remove('active'));
-                button.classList.add('active');
-                const tabName = button.getAttribute('data-tab');
-                tabContents.forEach(content => content.classList.toggle('active', content.id === tabName));
-            });
-        });
-    }
-
-    /**
-     * Sets up the toast notification for copy actions.
-     */
-    function setupToast() {
-        const toast = document.getElementById('toast');
-        const showToast = (message = 'Copied to clipboard!') => {
-            toast.textContent = message;
-            toast.classList.remove('opacity-0', 'translate-y-4');
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-y-4');
-            }, 2000);
-        };
-        
-        document.getElementById('copyButton').addEventListener('click', () => { 
-            const outputText = document.getElementById('outputText');
-            if(outputText.value) { 
-                outputText.select(); 
-                document.execCommand('copy'); 
-                window.getSelection().removeAllRanges(); 
-                showToast(); 
-            } 
-        });
-    }
-        
-    /**
-     * Sets up the Encoder/Decoder module.
-     */
-    function setupEncoder() {
-        const inputText = document.getElementById('inputText');
-        const outputText = document.getElementById('outputText');
-        const algorithmSelect = document.getElementById('algorithm');
-        const actionContainer = document.getElementById('action-container');
-        const caesarShiftContainer = document.getElementById('caesar-shift-container');
-        const caesarShift = document.getElementById('caesar-shift');
-        const HASH_ALGOS = ['md5', 'sha1', 'sha256', 'sha512'];
-        const SELF_INVERTING_ALGOS = ['rot13'];
-
-        const transformText = () => {
-            let t = inputText.value, a = algorithmSelect.value, o = document.querySelector('input[name="action"]:checked')?.value || 'encode', r = '';
-            if (!t) { outputText.value = ''; return; }
-            try {
-                switch (a) {
-                    case 'base64': r = o === 'encode' ? btoa(unescape(encodeURIComponent(t))) : decodeURIComponent(escape(atob(t))); break;
-                    case 'url': r = o === 'encode' ? encodeURIComponent(t) : decodeURIComponent(t.replace(/\+/g, ' ')); break;
-                    case 'html': { const d = document.createElement('div'); if (o === 'encode') { d.innerText = t; r = d.innerHTML; } else { d.innerHTML = t; r = d.innerText; } break; }
-                    case 'caesar': { const s = parseInt(caesarShift.value, 10) || 0, d = o === 'encode' ? s : -s; r = t.replace(/[a-zA-Z]/g, c => { const b = c < 'a' ? 65 : 97; return String.fromCharCode(((c.charCodeAt(0) - b + d + 26) % 26) + b); }); break; }
-                    case 'md5': r = CryptoJS.MD5(t).toString(); break;
-                    case 'sha1': r = CryptoJS.SHA1(t).toString(); break;
-                    case 'sha256': r = CryptoJS.SHA256(t).toString(); break;
-                    case 'sha512': r = CryptoJS.SHA512(t).toString(); break;
-                    case 'rot13': r = t.replace(/[a-zA-Z]/g, c => String.fromCharCode((c <= 'Z' ? 90 : 122) >= (c = c.charCodeAt(0) + 13) ? c : c - 26)); break;
-                    default: r = 'Invalid algorithm';
-                }
-            } catch (e) { r = `Error: Invalid input for this operation.`; }
-            outputText.value = r;
-        };
-
-        const handleAlgorithmChange = () => {
-            const currentAlgo = algorithmSelect.value;
-            const encodeRadio = document.querySelector('input[name="action"][value="encode"]');
-            const decodeRadio = document.querySelector('input[name="action"][value="decode"]');
-            const decodeLabel = decodeRadio.parentElement;
-            const isHash = HASH_ALGOS.includes(currentAlgo);
-            const isSelfInverting = SELF_INVERTING_ALGOS.includes(currentAlgo);
-            actionContainer.classList.toggle('hidden', isSelfInverting);
-            if (isHash) {
-                decodeRadio.disabled = true;
-                decodeLabel.classList.add('opacity-50', 'cursor-not-allowed');
-                if (!encodeRadio.checked) encodeRadio.checked = true;
-            } else {
-                decodeRadio.disabled = false;
-                decodeLabel.classList.remove('opacity-50', 'cursor-not-allowed');
-            }
-            caesarShiftContainer.classList.toggle('hidden', currentAlgo !== 'caesar');
-            transformText();
-        };
-
-        algorithmSelect.addEventListener('change', handleAlgorithmChange);
-        inputText.addEventListener('input', transformText);
-        caesarShift.addEventListener('input', transformText);
-        document.querySelectorAll('input[name="action"]').forEach(r => r.addEventListener('change', transformText));
-        handleAlgorithmChange(); // Initial setup
-    }
-
-    /**
-     * Sets up the JS Scraper & Endpoint Extractor module.
-     */
-    function setupJsScraper() {
-        const urlInput = document.getElementById('jsUrlInput');
-        const scrapeBtn = document.getElementById('jsScrapeBtn');
-        const filesList = document.getElementById('jsFilesList');
-        const resultsOutput = document.getElementById('jsResultsOutput');
-
-        const REGEX_PATTERNS = {
-            'RSA Private Key': { regex: /-----BEGIN RSA PRIVATE KEY-----/g, severity: 'Critical' },
-            'AWS Access Key ID': { regex: /AKIA[0-9A-Z]{16}/g, severity: 'High' },
-            'Slack Token': { regex: /(xox[p|b|a|r]-[0-9a-zA-Z]{10,12}-[0-9a-zA-Z]{10,12}-[0-9a-zA-Z]{10,12}-[a-zA-Z0-9]{32})/g, severity: 'High', group: 1 },
-            'Stripe Secret Key': { regex: /sk_live_[0-9a-zA-Z]{24}/g, severity: 'High' },
-            'Google API Key': { regex: /AIza[0-9A-Za-z-_]{35}/g, severity: 'High' },
-            'Generic Secret/Key': { regex: /(?:api|token|key|secret|password|auth|bearer|cred)[\w-]{0,25}\s*[:=]\s*['"`]([a-zA-Z0-9-_\.]{16,})['"`]/gi, severity: 'High', group: 1 },
-            'Firebase URL': { regex: /[a-zA-Z0-9-]+\.firebaseio\.com/g, severity: 'Medium' },
-            'Stripe Publishable Key': { regex: /pk_live_[0-9a-zA-Z]{24}/g, severity: 'Medium' },
-            'API Endpoint Path': { regex: /(['"`])((?:\/|\.\/|\.\.\/)[^'"`\s]*api\/[^'"`\s]+)\1/g, severity: 'Medium', group: 2 },
-            'Full URL': { regex: /(['"`])(https?:\/\/[^'"`\s]+)\1/g, severity: 'Info', group: 2 }
-        };
-
-        scrapeBtn.addEventListener('click', async () => {
-            let url = urlInput.value.trim();
-            if (!url) { resultsOutput.innerHTML = '<p class="text-yellow-400">Please enter a URL to scrape.</p>'; return; }
-            if (!url.startsWith('http')) url = 'https://' + url;
-            urlInput.value = url;
-
-            filesList.innerHTML = '<p class="text-slate-400">Fetching HTML...</p>';
-            resultsOutput.innerHTML = '<p class="text-slate-400">Waiting to fetch JS files...</p>';
-            scrapeBtn.disabled = true; scrapeBtn.textContent = 'Scraping...'; scrapeBtn.classList.add('opacity-50', 'cursor-not-allowed');
-
-            try {
-                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
-                const response = await fetch(proxyUrl);
-                const html = await response.text();
-
-                const scriptRegex = /<script[^>]+src=["']([^"']+)["']/g;
-                let match;
-                const scriptUrls = new Set();
-                while ((match = scriptRegex.exec(html)) !== null) {
-                    try {
-                        const scriptUrl = new URL(match[1], url).href;
-                        scriptUrls.add(scriptUrl);
-                    } catch (e) { console.warn("Invalid script URL found:", match[1]); }
-                }
-
-                if (scriptUrls.size === 0) {
-                    filesList.innerHTML = '<p class="text-slate-400">No external JS files found.</p>';
-                    resultsOutput.innerHTML = '';
-                    return;
-                }
-                
-                filesList.innerHTML = Array.from(scriptUrls).map(src => `<div class="p-2 bg-slate-800 rounded text-sm break-all">${src}</div>`).join('');
-                resultsOutput.innerHTML = '<p class="text-slate-400">Analyzing JS files...</p>';
-                
-                let findingsHtml = '';
-                for (const scriptUrl of scriptUrls) {
-                    let scriptFindings = '';
-                    try {
-                        const scriptProxy = `https://api.allorigins.win/raw?url=${encodeURIComponent(scriptUrl)}`;
-                        const scriptRes = await fetch(scriptProxy);
-                        const scriptContent = await scriptRes.text();
-
-                        for (const [name, pattern] of Object.entries(REGEX_PATTERNS)) {
-                            pattern.regex.lastIndex = 0; 
-                            let findingMatch;
-                            while ((findingMatch = pattern.regex.exec(scriptContent)) !== null) {
-                                const finding = (pattern.group ? findingMatch[pattern.group] : findingMatch[0]).replace(/\\/g, '');
-                                const severity = pattern.severity;
-                                const sevColorClass = severity === 'Critical' ? 'bg-purple-500/20 text-purple-400' :
-                                                      severity === 'High' ? 'bg-red-500/20 text-red-400' :
-                                                      severity === 'Medium' ? 'bg-yellow-500/20 text-yellow-400' :
-                                                      'bg-blue-500/20 text-blue-400';
-                                
-                                scriptFindings += `<div class="p-2 border-l-4 border-slate-600">
-                                    <p class="font-semibold">${name} <span class="text-sm font-normal px-2 py-1 rounded-full ${sevColorClass}">${severity}</span></p>
-                                    <p class="text-slate-300 break-all font-mono text-sm">${finding}</p>
-                                </div>`;
-                            }
-                        }
-                    } catch (e) {
-                         scriptFindings += `<div class="p-2 border-l-4 border-red-500"><p class="text-red-400">Could not fetch or analyze.</p></div>`;
-                    }
-                    if (scriptFindings) {
-                        findingsHtml += `<div class="mb-4"><h3 class="font-bold text-blue-400 break-all">${scriptUrl}</h3><div class="space-y-2 mt-2">${scriptFindings}</div></div>`;
-                    }
-                }
-                resultsOutput.innerHTML = findingsHtml || '<p class="text-slate-400">No specific endpoints or secrets found in the scanned files.</p>';
-
-            } catch (error) {
-                filesList.innerHTML = `<p class="text-red-400">Error fetching URL.</p>`;
-                resultsOutput.innerHTML = `<p class="text-red-400">${error.message}</p>`;
-            } finally {
-                 scrapeBtn.disabled = false; scrapeBtn.textContent = 'Scrape'; scrapeBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-            }
-        });
-    }
-
-    /**
-     * Sets up the Data Analyzer (Identifier) module.
-     */
-    function setupDataAnalyzer() {
-        const analyzerInput = document.getElementById('analyzerInput');
-        const analyzerBtn = document.getElementById('analyzerBtn');
-        const analyzerOutput = document.getElementById('analyzerOutput');
-
-        const DETECTION_RULES = [
-            { name: 'JWT (JSON Web Token)', regex: /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_.+/=]*$/ },
-            { name: 'SHA-512 Hash', regex: /^[a-f0-9]{128}$/i },
-            { name: 'SHA-256 Hash', regex: /^[a-f0-9]{64}$/i },
-            { name: 'SHA-1 Hash', regex: /^[a-f0-9]{40}$/i },
-            { name: 'MD5 Hash', regex: /^[a-f0-9]{32}$/i },
-            { name: 'URL Encoded String', regex: /%[0-9a-fA-F]{2}/ },
-            { name: 'Base64 Encoded String', regex: /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/i },
-            { name: 'Hexadecimal String', regex: /^[0-9a-fA-F]+$/i },
+        const TABS = [
+            { id: 'encoder', icon: 'M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4', name: 'Encoder / Decoder' },
+            { id: 'js-scraper', icon: 'M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4', name: 'JS Scraper' },
+            { id: 'data-analyzer', icon: 'M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z', name: 'Hash Identifier' },
+            { id: 'json-formatter', icon: 'M4 6h16M4 12h16M4 18h7', name: 'JSON Formatter' }, // The surprise!
+            { id: 'subdomain-finder', icon: 'M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z', name: 'Subdomain Recon' },
+            { id: 'security-headers', icon: 'M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z', name: 'Header Analyzer' },
+            { id: 'jwt', icon: 'M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4v-3.286a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z', name: 'JWT Inspector' },
+            { id: 'timestamp', icon: 'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z', name: 'Epoch Tools' },
+            { id: 'url-parser', icon: 'M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1', name: 'URL Parser' },
+            { id: 'ip-subnet', icon: 'M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10', name: 'CIDR Calc' },
+            { id: 'dns-lookup', icon: 'M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9', name: 'DNS Dig' },
+            { id: 'exif-viewer', icon: 'M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z', name: 'EXIF Data' },
         ];
 
-        analyzerBtn.addEventListener('click', () => {
-            const input = analyzerInput.value.trim();
-            if (!input) { analyzerOutput.innerHTML = '<p class="text-yellow-400">Please enter some data to analyze.</p>'; return; }
-            const detectedFormats = [];
-            for (const rule of DETECTION_RULES) {
-                if (rule.regex.test(input)) {
-                    if (rule.name === 'Base64 Encoded String' && /^[0-9a-fA-F]+$/i.test(input) && input.length < 20) continue;
-                    detectedFormats.push(rule.name);
-                }
-            }
-            if (detectedFormats.length > 0) {
-                analyzerOutput.innerHTML = `<p class="text-blue-400">Possible Detected Formats:</p><ul class="list-disc list-inside mt-2 space-y-1">${detectedFormats.map(f => `<li class="text-slate-300">${f}</li>`).join('')}</ul>`;
-            } else {
-                analyzerOutput.innerHTML = '<p class="text-slate-400">Could not identify a specific format. The data appears to be <span class="font-bold">Plain Text</span>.</p>';
-            }
-        });
-    }
-
-    /**
-     * Sets up the Subdomain Finder module.
-     */
-    function setupSubdomainFinder() {
-        const domainInput = document.getElementById('subdomainDomainInput');
-        const findBtn = document.getElementById('subdomainFindBtn');
-        const outputActive = document.getElementById('subdomainOutputActive');
-        const outputInactive = document.getElementById('subdomainOutputInactive');
-        const downloadActiveBtn = document.getElementById('subdomainDownloadActiveBtn');
-        const downloadAllBtn = document.getElementById('subdomainDownloadAllBtn');
-        const statusDiv = document.getElementById('subdomain-status');
-
-        findBtn.addEventListener('click', async () => {
-            const domain = domainInput.value.trim();
-            if (!domain) {
-                statusDiv.textContent = 'Please enter a domain name.';
-                return;
-            }
-
-            // Reset UI
-            statusDiv.textContent = `Searching certificates for ${domain}...`;
-            outputActive.value = '';
-            outputInactive.value = '';
-            findBtn.disabled = true;
-            findBtn.textContent = 'Searching...';
-            findBtn.classList.add('opacity-50', 'cursor-not-allowed');
-            downloadActiveBtn.classList.add('hidden');
-            downloadAllBtn.classList.add('hidden');
-
-            try {
-                const response = await fetch(`https://crt.sh/?q=%.${domain}&output=json`);
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                const data = await response.json();
-                
-                if (data.length === 0) {
-                    statusDiv.textContent = `No subdomains found for ${domain}.`;
-                    return;
-                }
-
-                const subdomains = new Set();
-                data.forEach(cert => {
-                    cert.name_value.split('\n').forEach(name => {
-                        if (name.endsWith(`.${domain}`) && !name.includes('*')) {
-                           subdomains.add(name.trim());
-                        }
-                    });
-                });
-                
-                const sortedSubdomains = Array.from(subdomains).sort();
-                if (sortedSubdomains.length === 0) {
-                    statusDiv.textContent = `No subdomains found for ${domain}.`;
-                    return;
-                }
-                
-                // Start checking status
-                const active = [], inactive = [];
-                let checkedCount = 0;
-                statusDiv.textContent = `Found ${sortedSubdomains.length} unique subdomains. Checking status (0/${sortedSubdomains.length})...`;
-
-                const promises = sortedSubdomains.map(subdomain => {
-                    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent('http://' + subdomain)}`;
-                    return fetch(proxyUrl, { method: 'HEAD', mode: 'cors' })
-                        .then(response => {
-                             if(response.ok || response.status === 404 || response.status === 403) { // Even errors mean it's live
-                                active.push(subdomain);
-                             } else {
-                                inactive.push(subdomain);
-                             }
-                        })
-                        .catch(() => {
-                            inactive.push(subdomain);
-                        })
-                        .finally(() => {
-                            checkedCount++;
-                            statusDiv.textContent = `Checking status (${checkedCount}/${sortedSubdomains.length})...`;
-                        });
-                });
-                
-                await Promise.all(promises);
-
-                outputActive.value = active.sort().join('\n');
-                outputInactive.value = inactive.sort().join('\n');
-                statusDiv.textContent = `Check complete. Found ${active.length} active and ${inactive.length} inactive subdomains.`;
-                if(active.length > 0) downloadActiveBtn.classList.remove('hidden');
-                if(sortedSubdomains.length > 0) downloadAllBtn.classList.remove('hidden');
-
-
-            } catch (error) {
-                statusDiv.textContent = `An error occurred: ${error.message}.`;
-            } finally {
-                findBtn.disabled = false;
-                findBtn.textContent = 'Find Subdomains';
-                findBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-            }
+        document.addEventListener('DOMContentLoaded', () => {
+            buildNavigation();
+            setupToast();
+            setupEncoder();
+            setupJsScraper();
+            setupDataAnalyzer();
+            setupSubdomainFinder();
+            setupSecurityHeaders();
+            setupJWT();
+            setupTimestamp();
+            setupURLParser();
+            setupIPCalculator();
+            setupDNSLookup();
+            setupEXIFViewer();
+            setupJSONFormatter();
         });
 
-        const download = (filename, text) => {
-             if (!text) return;
-            const blob = new Blob([text], { type: 'text/plain' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = filename;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+        function buildNavigation() {
+            const navContainer = document.getElementById('nav-container');
+            const mobileSelect = document.getElementById('mobile-nav');
+
+            TABS.forEach((tab, index) => {
+                // Desktop Sidebar Link
+                const btn = document.createElement('button');
+                btn.className = `w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all group ${index === 0 ? 'bg-dark-700 text-white shadow-md' : 'text-zinc-400 hover:text-white hover:bg-dark-700/50'}`;
+                btn.dataset.tab = tab.id;
+                btn.innerHTML = `
+                    <svg class="w-5 h-5 ${index === 0 ? 'text-neon-cyan' : 'text-zinc-500 group-hover:text-neon-cyan'} transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="${tab.icon}"></path>
+                    </svg>
+                    ${tab.name}
+                `;
+                
+                btn.addEventListener('click', () => switchTab(tab.id, btn));
+                navContainer.appendChild(btn);
+
+                // Mobile Select Option
+                const opt = document.createElement('option');
+                opt.value = tab.id;
+                opt.textContent = tab.name;
+                mobileSelect.appendChild(opt);
+            });
+
+            mobileSelect.addEventListener('change', (e) => switchTab(e.target.value));
         }
 
-        downloadActiveBtn.addEventListener('click', () => {
-            const domain = domainInput.value.trim() || 'subdomains';
-            download(`${domain}-active.txt`, outputActive.value);
-        });
-        downloadAllBtn.addEventListener('click', () => {
-            const domain = domainInput.value.trim() || 'subdomains';
-            const allText = `--- ACTIVE ---\n${outputActive.value}\n\n--- INACTIVE ---\n${outputInactive.value}`;
-            download(`${domain}-all.txt`, allText);
-        });
-    }
-
-    /**
-     * Sets up the Security Headers Analyzer module.
-     */
-    function setupSecurityHeaders() {
-        const urlInput = document.getElementById('headerUrlInput');
-        const analyzeBtn = document.getElementById('headerAnalyzeBtn');
-        const outputArea = document.getElementById('headerOutput');
-        const SECURITY_HEADERS_DB = {
-            'content-security-policy': { severity: 'High', description: 'Helps prevent Cross-Site Scripting (XSS) and other code injection attacks.', recommendation: "Implement a strict CSP, starting with `default-src 'self'`." },
-            'strict-transport-security': { severity: 'High', description: 'Enforces secure (HTTPS) connections.', recommendation: 'Set `max-age` for a long duration, e.g., `max-age=31536000; includeSubDomains`.' },
-            'x-content-type-options': { severity: 'Medium', description: 'Prevents MIME-sniffing.', recommendation: 'Set to `nosniff`.' },
-            'x-frame-options': { severity: 'Medium', description: 'Protects against clickjacking.', recommendation: 'Set to `SAMEORIGIN` or `DENY`.' },
-            'referrer-policy': { severity: 'Low', description: 'Controls referrer information.', recommendation: 'Set to `strict-origin-when-cross-origin` or `no-referrer`.' },
-            'permissions-policy': { severity: 'Medium', description: 'Controls browser features.', recommendation: 'Disable features you don\'t need.' }
-        };
-
-        analyzeBtn.addEventListener('click', async () => {
-            let url = urlInput.value.trim();
-            if (!url) { outputArea.innerHTML = '<p class="text-yellow-400">Please enter a URL.</p>'; return; }
-            const cleanUrl = url.replace(/^https?:\/\//, '');
-            urlInput.value = url.startsWith('http') ? url : 'https://' + cleanUrl;
-            outputArea.innerHTML = `<p class="text-slate-400">Analyzing headers for ${cleanUrl}...</p>`;
-            analyzeBtn.disabled = true; analyzeBtn.textContent = 'Analyzing...'; analyzeBtn.classList.add('opacity-50', 'cursor-not-allowed');
-            try {
-                const targetApiUrl = `https://api.hackertarget.com/httpheaders/?q=${cleanUrl}`;
-                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetApiUrl)}`;
-                const response = await fetch(proxyUrl);
-                const rawHeaderText = await response.text();
-                if (rawHeaderText.includes("error check your api input") || !response.ok) throw new Error("API error. Check URL or try again later.");
-                
-                const allRawHeaders = {}, headerLines = rawHeaderText.split('\n');
-                headerLines.slice(1).forEach(line => {
-                    const separatorIndex = line.indexOf(':');
-                    if (separatorIndex > 0) {
-                        const key = line.substring(0, separatorIndex).trim().toLowerCase();
-                        const value = line.substring(separatorIndex + 1).trim();
-                        allRawHeaders[key] = value;
-                    }
-                });
-                const presentHeaders = {}, missingHeaders = { ...SECURITY_HEADERS_DB };
-                for (const key in allRawHeaders) { if (key in missingHeaders) { presentHeaders[key] = allRawHeaders[key]; delete missingHeaders[key]; } }
-                
-                let presentHtml = '<h3 class="text-xl font-semibold mb-2 text-green-400">✅ Present Security Headers</h3>';
-                presentHtml += Object.keys(presentHeaders).length > 0 ? `<div class="output-table"><table><tbody>${Object.entries(presentHeaders).map(([k, v]) => `<tr><td class="key">${k}</td><td class="value">${v}</td></tr>`).join('')}</tbody></table></div>` : '<p class="text-slate-400">No recommended security headers found.</p>';
-
-                let missingHtml = '<h3 class="text-xl font-semibold mt-6 mb-2 text-yellow-400">⚠️ Missing Headers & Recommendations</h3>';
-                missingHtml += Object.keys(missingHeaders).length > 0 ? `<div class="space-y-4">${Object.entries(missingHeaders).map(([k, i]) => `<div class="p-4 rounded-md border border-slate-700 bg-slate-900/50"><p class="font-bold text-lg">${k} <span class="text-sm font-normal px-2 py-1 rounded-full ${i.severity === 'High' ? 'bg-red-500/20 text-red-400' : i.severity === 'Medium' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-blue-500/20 text-blue-400'}">${i.severity}</span></p><p class="text-slate-400 mt-1">${i.description}</p><p class="text-slate-300 mt-2"><span class="font-semibold text-blue-400">Recommendation:</span> ${i.recommendation}</p></div>`).join('')}</div>` : '<p class="text-green-400">Excellent! All recommended security headers are present.</p>';
-                
-                let allRawHtml = '<h3 class="text-xl font-semibold mt-6 mb-2 text-slate-400">📋 All Raw Headers</h3>';
-                allRawHtml += Object.keys(allRawHeaders).length > 0 ? `<div class="output-table"><table><tbody>${Object.entries(allRawHeaders).map(([k, v]) => `<tr><td class="key">${k}</td><td class="value">${v}</td></tr>`).join('')}</tbody></table></div>` : '<p class="text-slate-500">Could not retrieve any headers.</p>';
-
-                outputArea.innerHTML = presentHtml + missingHtml + allRawHtml;
-            } catch (error) {
-                outputArea.innerHTML = `<p class="text-red-400">Error: Could not fetch headers. Site may be down or API is unavailable.</p>`;
-            } finally {
-                analyzeBtn.disabled = false; analyzeBtn.textContent = 'Analyze'; analyzeBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-            }
-        });
-    }
-
-    /**
-     * Sets up the JWT Inspector module.
-     */
-    function setupJWT() {
-        const jwtInput = document.getElementById('jwtInput');
-        const jwtHeaderOutput = document.getElementById('jwtHeaderOutput');
-        const jwtPayloadOutput = document.getElementById('jwtPayloadOutput');
-        
-        const decodeJwt = () => {
-            const t = jwtInput.value;
-            jwtHeaderOutput.value = ''; jwtPayloadOutput.value = '';
-            if (!t || t.split('.').length !== 3) { jwtHeaderOutput.value = 'Invalid JWT. Expected three parts separated by dots.'; return; }
-            const [h, p] = t.split('.');
-            try { jwtHeaderOutput.value = JSON.stringify(JSON.parse(atob(h.replace(/-/g, '+').replace(/_/g, '/'))), null, 2); } catch (e) { jwtHeaderOutput.value = 'Error decoding header.'; }
-            try { jwtPayloadOutput.value = JSON.stringify(JSON.parse(atob(p.replace(/-/g, '+').replace(/_/g, '/'))), null, 2); } catch (e) { jwtPayloadOutput.value = 'Error decoding payload.'; }
-        };
-        jwtInput.addEventListener('input', decodeJwt);
-    }
-
-    /**
-     * Sets up the Timestamp Converter module.
-     */
-    function setupTimestamp() {
-        const unixInput = document.getElementById('unixInput');
-        const humanOutput = document.getElementById('humanOutput');
-        const humanInput = document.getElementById('humanInput');
-        const unixOutput = document.getElementById('unixOutput');
-        unixInput.addEventListener('input', () => { const t = parseInt(unixInput.value, 10); humanOutput.value = !isNaN(t) ? new Date(t * 1000).toUTCString() : ''; });
-        humanInput.addEventListener('input', () => { const d = new Date(humanInput.value); unixOutput.value = !isNaN(d.getTime()) ? Math.floor(d.getTime() / 1000) : ''; });
-    }
-
-    /**
-     * Sets up the URL Parser module.
-     */
-    function setupURLParser() {
-        const urlInput = document.getElementById('urlInput');
-        const urlOutput = document.getElementById('urlOutput');
-        
-        const parseUrl = () => {
-            const u = urlInput.value;
-            urlOutput.innerHTML = ''; if (!u) return;
-            try {
-                const t = new URL(u); let p = '';
-                t.searchParams.forEach((v, k) => { p += `<tr><td class="key">${k}</td><td class="value">${v}</td></tr>`; });
-                const mainDetails = `<table><tbody><tr><td class="key">Protocol</td><td class="value">${t.protocol}</td></tr><tr><td class="key">Hostname</td><td class="value">${t.hostname}</td></tr><tr><td class="key">Port</td><td class="value">${t.port || '(default)'}</td></tr><tr><td class="key">Pathname</td><td class="value">${t.pathname}</td></tr><tr><td class="key">Hash</td><td class="value">${t.hash || '(none)'}</td></tr></tbody></table>`;
-                urlOutput.innerHTML = mainDetails + (p ? `<h3 class="text-xl font-semibold mt-6 mb-2 text-blue-400">Query Parameters</h3><table><tbody>${p}</tbody></table>` : '');
-            } catch (e) { urlOutput.innerHTML = `<p class="text-red-400">Error: Invalid URL.</p>`; }
-        };
-        urlInput.addEventListener('input', parseUrl);
-        parseUrl(); // Initial call
-    }
-
-    /**
-     * Sets up the IP Subnet Calculator module.
-     */
-    function setupIPCalculator() {
-        const ipInput = document.getElementById('ipInput');
-        const ipOutput = document.getElementById('ipOutput');
-        
-        const calculateSubnet = () => {
-            const input = ipInput.value; ipOutput.innerHTML = '';
-            const [ip, cidr] = (input || '').split('/');
-            const cidrInt = parseInt(cidr, 10);
-            if (!ip || isNaN(cidrInt) || cidrInt < 0 || cidrInt > 32) { if (input) ipOutput.innerHTML = '<p class="text-red-400">Invalid format. Use IP/CIDR (e.g., 192.168.1.1/24).</p>'; return; }
-            const ipParts = ip.split('.').map(p => parseInt(p, 10));
-            if (ipParts.length !== 4 || ipParts.some(p => isNaN(p) || p < 0 || p > 255)) { ipOutput.innerHTML = '<p class="text-red-400">Invalid IP address.</p>'; return; }
-            const ipLong = ipParts.reduce((acc, part) => (acc << 8) + part, 0) >>> 0;
-            const mask = (-1 << (32 - cidrInt)) >>> 0;
-            const networkLong = ipLong & mask;
-            const broadcastLong = networkLong | (~mask >>> 0);
-            const longToIp = (long) => [(long >>> 24) & 255, (long >>> 16) & 255, (long >>> 8) & 255, long & 255].join('.');
-            const totalHosts = Math.pow(2, 32 - cidrInt);
-            const results = { "Network Address": longToIp(networkLong), "Broadcast Address": longToIp(broadcastLong), "Subnet Mask": longToIp(mask), "Total Hosts": totalHosts.toLocaleString(), "Usable Host Range": cidrInt > 30 ? 'N/A' : `${longToIp(networkLong + 1)} - ${longToIp(broadcastLong - 1)}`, "Usable Hosts": (cidrInt <= 30 ? totalHosts - 2 : 0).toLocaleString() };
-            ipOutput.innerHTML = `<table><tbody>${Object.entries(results).map(([k, v]) => `<tr><td class="key">${k}</td><td class="value">${v}</td></tr>`).join('')}</tbody></table>`;
-        };
-        ipInput.addEventListener('input', calculateSubnet);
-        calculateSubnet(); // Initial call
-    }
-        
-    /**
-     * Sets up the DNS Lookup module.
-     */
-    function setupDNSLookup() {
-        const dnsDomainInput = document.getElementById('dnsDomainInput');
-        const dnsTypeSelect = document.getElementById('dnsTypeSelect');
-        const dnsLookupBtn = document.getElementById('dnsLookupBtn');
-        const dnsOutput = document.getElementById('dnsOutput');
-        
-        dnsLookupBtn.addEventListener('click', async () => {
-            const domain = dnsDomainInput.value, type = dnsTypeSelect.value;
-            if (!domain) { dnsOutput.innerHTML = '<p class="text-red-400">Please enter a domain.</p>'; return; }
-            dnsOutput.innerHTML = '<p class="text-slate-400">Looking up...</p>';
-            dnsLookupBtn.disabled = true; dnsLookupBtn.textContent = 'Searching...'; dnsLookupBtn.classList.add('opacity-50', 'cursor-not-allowed');
-            try {
-                const response = await fetch(`https://dns.google/resolve?name=${domain}&type=${type}`);
-                const data = await response.json();
-                if (data.Status !== 0 || !data.Answer) {
-                    dnsOutput.innerHTML = `<p class="text-slate-400">No records found for this type.</p>`;
-                } else {
-                    const rows = data.Answer.map(r => `<tr><td class="value">${r.name}</td><td class="value">${type}</td><td class="value">${r.TTL}</td><td class="value" style="white-space: pre-wrap;">${r.data.replace(/^"|"$/g, '').replace(/""/g, '"')}</td></tr>`).join('');
-                    dnsOutput.innerHTML = `<table><thead><tr><th class="key">Name</th><th class="key">Type</th><th class="key">TTL</th><th class="key">Data</th></tr></thead><tbody>${rows}</tbody></table>`;
-                }
-            } catch (e) { dnsOutput.innerHTML = `<p class="text-red-400">Error: Could not fetch DNS records.</p>`; } 
-            finally { dnsLookupBtn.disabled = false; dnsLookupBtn.textContent = 'Lookup'; dnsLookupBtn.classList.remove('opacity-50', 'cursor-not-allowed'); }
-        });
-    }
-
-    /**
-     * Sets up the EXIF Viewer module.
-     */
-    function setupEXIFViewer() {
-        const fileDropZone = document.getElementById('file-drop-zone');
-        const exifFileInput = document.getElementById('exifFileInput');
-        const exifOutput = document.getElementById('exifOutput');
-
-        const handleExifFile = file => {
-            if (typeof EXIF === 'undefined') { exifOutput.innerHTML = `<p class="text-red-400">EXIF library could not be loaded. Please check your internet connection.</p>`; return; }
-            if (!file || !file.type.match('image.*')) { exifOutput.innerHTML = `<p class="text-red-400">Please select an image file.</p>`; return; }
-            EXIF.getData(file, function() {
-                const allTags = EXIF.getAllTags(this);
-                if (Object.keys(allTags).length === 0) { exifOutput.innerHTML = `<p class="text-slate-400">No EXIF data found in this image.</p>`; return; }
-                const rows = Object.entries(allTags).map(([k, v]) => `<tr><td class="key">${k}</td><td class="value">${v}</td></tr>`).join('');
-                exifOutput.innerHTML = `<table><tbody>${rows}</tbody></table>`;
+        function switchTab(tabId, clickedBtn = null) {
+            // Update contents
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.remove('active');
             });
-        };
-        fileDropZone.addEventListener('click', () => exifFileInput.click());
-        exifFileInput.addEventListener('change', (e) => handleExifFile(e.target.files[0]));
-        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eName => fileDropZone.addEventListener(eName, e => { e.preventDefault(); e.stopPropagation(); }));
-        ['dragenter', 'dragover'].forEach(eName => fileDropZone.addEventListener(eName, () => fileDropZone.classList.add('dragover')));
-        ['dragleave', 'drop'].forEach(eName => fileDropZone.addEventListener(eName, () => fileDropZone.classList.remove('dragover')));
-        fileDropZone.addEventListener('drop', e => handleExifFile(e.dataTransfer.files[0]));
-    }
+            document.getElementById(tabId).classList.add('active');
+
+            // Update Desktop buttons
+            const buttons = document.querySelectorAll('#nav-container button');
+            buttons.forEach(btn => {
+                btn.className = 'w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all group text-zinc-400 hover:text-white hover:bg-dark-700/50';
+                btn.querySelector('svg').className = 'w-5 h-5 text-zinc-500 group-hover:text-neon-cyan transition-colors';
+            });
+
+            const activeBtn = clickedBtn || document.querySelector(`#nav-container button[data-tab="${tabId}"]`);
+            if (activeBtn) {
+                activeBtn.className = 'w-full flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm font-medium transition-all group bg-dark-700 text-white shadow-md border border-dark-600';
+                activeBtn.querySelector('svg').className = 'w-5 h-5 text-neon-cyan transition-colors';
+            }
+
+            // Sync mobile
+            document.getElementById('mobile-nav').value = tabId;
+        }
+
+        function setupToast() {
+            const toast = document.getElementById('toast');
+            document.getElementById('copyButton').addEventListener('click', () => {
+                const out = document.getElementById('outputText');
+                if(out.value) {
+                    out.select();
+                    document.execCommand('copy');
+                    window.getSelection().removeAllRanges();
+                    
+                    toast.classList.remove('opacity-0', 'translate-y-20');
+                    setTimeout(() => toast.classList.add('opacity-0', 'translate-y-20'), 2500);
+                }
+            });
+        }
+
+        // ---------- ORIGINAL TOOL LOGIC (Ported & attached to new IDs) ----------
+        function setupJSONFormatter() {
+            const io = document.getElementById('jsonInputOutput');
+            const err = document.getElementById('jsonError');
+            
+            document.getElementById('jsonFormatBtn').addEventListener('click', () => {
+                try {
+                    err.classList.add('hidden');
+                    const obj = JSON.parse(io.value);
+                    io.value = JSON.stringify(obj, null, 4);
+                } catch(e) { err.classList.remove('hidden'); }
+            });
+            document.getElementById('jsonMinifyBtn').addEventListener('click', () => {
+                try {
+                    err.classList.add('hidden');
+                    const obj = JSON.parse(io.value);
+                    io.value = JSON.stringify(obj);
+                } catch(e) { err.classList.remove('hidden'); }
+            });
+        }
+
+        function setupEncoder() {
+            const inp = document.getElementById('inputText'), out = document.getElementById('outputText');
+            const algo = document.getElementById('algorithm'), acts = document.querySelectorAll('input[name="action"]');
+            const cShift = document.getElementById('caesar-shift');
+            
+            const run = () => {
+                let t = inp.value, a = algo.value, o = document.querySelector('input[name="action"]:checked').value, r = '';
+                if (!t) { out.value = ''; return; }
+                try {
+                    switch(a) {
+                        case 'base64': r = o==='encode'?btoa(unescape(encodeURIComponent(t))):decodeURIComponent(escape(atob(t))); break;
+                        case 'url': r = o==='encode'?encodeURIComponent(t):decodeURIComponent(t.replace(/\+/g, ' ')); break;
+                        case 'html': const d=document.createElement('div'); if(o==='encode'){d.innerText=t; r=d.innerHTML;}else{d.innerHTML=t; r=d.innerText;} break;
+                        case 'caesar': const s=parseInt(cShift.value)||0, d2=o==='encode'?s:-s; r=t.replace(/[a-zA-Z]/g,c=>{const b=c<'a'?65:97;return String.fromCharCode(((c.charCodeAt(0)-b+d2+26)%26)+b)}); break;
+                        case 'md5': r = CryptoJS.MD5(t).toString(); break;
+                        case 'sha1': r = CryptoJS.SHA1(t).toString(); break;
+                        case 'sha256': r = CryptoJS.SHA256(t).toString(); break;
+                        case 'sha512': r = CryptoJS.SHA512(t).toString(); break;
+                        case 'rot13': r = t.replace(/[a-zA-Z]/g,c=>String.fromCharCode((c<='Z'?90:122)>=(c=c.charCodeAt(0)+13)?c:c-26)); break;
+                    }
+                } catch(e) { r = 'Error: Invalid input format.'; }
+                out.value = r;
+            };
+
+            const updateUI = () => {
+                const a = algo.value;
+                const isHash = ['md5','sha1','sha256','sha512'].includes(a);
+                const isSelf = ['rot13'].includes(a);
+                document.getElementById('action-container').style.display = isSelf ? 'none' : 'block';
+                document.getElementById('caesar-shift-container').style.display = a==='caesar'?'block':'none';
+                
+                const decR = document.querySelector('input[value="decode"]');
+                if(isHash) {
+                    decR.disabled = true; decR.nextElementSibling.classList.add('opacity-30', 'cursor-not-allowed');
+                    document.querySelector('input[value="encode"]').checked = true;
+                } else {
+                    decR.disabled = false; decR.nextElementSibling.classList.remove('opacity-30', 'cursor-not-allowed');
+                }
+                run();
+            };
+
+            algo.addEventListener('change', updateUI);
+            inp.addEventListener('input', run);
+            cShift.addEventListener('input', run);
+            acts.forEach(a => a.addEventListener('change', run));
+            updateUI();
+        }
+
+        function setupJsScraper() {
+            const btn = document.getElementById('jsScrapeBtn'), inp = document.getElementById('jsUrlInput');
+            const fList = document.getElementById('jsFilesList'), res = document.getElementById('jsResultsOutput');
+            const REGEX = {
+                'Private Key': { r: /-----BEGIN PRIVATE KEY-----/g, s: 'Critical', c: 'text-neon-pink' },
+                'AWS Key': { r: /AKIA[0-9A-Z]{16}/g, s: 'High', c: 'text-red-400' },
+                'Generic Secret': { r: /(?:api|token|key|secret)[\w-]{0,25}\s*[:=]\s*['"`]([a-zA-Z0-9-_\.]{16,})['"`]/gi, s: 'High', g: 1, c: 'text-red-400' },
+                'Endpoint': { r: /(['"`])((?:\/|\.\/|\.\.\/)[^'"`\s]*api\/[^'"`\s]+)\1/g, s: 'Medium', g: 2, c: 'text-neon-cyan' }
+            };
+
+            btn.addEventListener('click', async () => {
+                let url = inp.value.trim(); if(!url) return;
+                if(!url.startsWith('http')) url = 'https://'+url; inp.value = url;
+                btn.innerHTML = '<svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-black" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Scraping...';
+                fList.innerHTML = '<p class="text-neon-cyan animate-pulse">Fetching DOM...</p>'; res.innerHTML = '';
+                
+                try {
+                    const h = await (await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`)).text();
+                    const urls = new Set([...h.matchAll(/<script[^>]+src=["']([^"']+)["']/g)].map(m => new URL(m[1], url).href));
+                    
+                    if(!urls.size) { fList.innerHTML='<p class="text-zinc-500">No external JS found.</p>'; btn.innerHTML='Initiate Scan'; return; }
+                    fList.innerHTML = [...urls].map(u => `<div class="p-2 border border-dark-600 rounded bg-dark-800 break-all">${u}</div>`).join('');
+                    
+                    res.innerHTML = '<p class="text-neon-cyan animate-pulse">Analyzing chunks...</p>';
+                    let findings = '';
+                    for(const u of urls) {
+                        try {
+                            const c = await (await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(u)}`)).text();
+                            let sf = '';
+                            for(const [n, p] of Object.entries(REGEX)) {
+                                p.r.lastIndex = 0; let m;
+                                while((m = p.r.exec(c)) !== null) {
+                                    const val = (p.g ? m[p.g] : m[0]).replace(/\\/g, '');
+                                    sf += `<div class="p-2 border-l-2 border-dark-600 bg-dark-900 mb-1"><span class="${p.c} font-bold">[${p.s}]</span> ${n}: <span class="text-zinc-300">${val}</span></div>`;
+                                }
+                            }
+                            if(sf) findings += `<div class="mb-4"><h4 class="text-neon-cyan font-bold break-all mb-2">${u}</h4>${sf}</div>`;
+                        } catch(e){}
+                    }
+                    res.innerHTML = findings || '<p class="text-zinc-500 text-center mt-10">No clear secrets detected in JS.</p>';
+                } catch(e) {
+                    fList.innerHTML = '<p class="text-neon-pink">CORS or Network Error.</p>';
+                }
+                btn.innerHTML = 'Initiate Scan';
+            });
+        }
+
+        function setupDataAnalyzer() {
+            const RULES = [
+                {n: 'JWT', r: /^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.[A-Za-z0-9-_.+/=]*$/},
+                {n: 'SHA-512', r: /^[a-f0-9]{128}$/i}, {n: 'SHA-256', r: /^[a-f0-9]{64}$/i},
+                {n: 'MD5', r: /^[a-f0-9]{32}$/i}, {n: 'Base64', r: /^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$/i}
+            ];
+            document.getElementById('analyzerBtn').addEventListener('click', () => {
+                const i = document.getElementById('analyzerInput').value.trim();
+                const out = document.getElementById('analyzerOutput');
+                if(!i) { out.innerHTML = 'No input provided.'; return; }
+                const found = RULES.filter(r => r.r.test(i) && !(r.n==='Base64' && /^[0-9a-fA-F]+$/i.test(i) && i.length<20)).map(r => r.n);
+                out.innerHTML = found.length ? `<span class="text-neon-green">Matches:</span> ${found.join(', ')}` : '<span class="text-zinc-500">Unrecognized Format (Plaintext/Custom)</span>';
+            });
+        }
+
+        function setupSubdomainFinder() {
+            const btn = document.getElementById('subdomainFindBtn'), stat = document.getElementById('subdomain-status');
+            const oA = document.getElementById('subdomainOutputActive'), oI = document.getElementById('subdomainOutputInactive');
+            btn.addEventListener('click', async () => {
+                const d = document.getElementById('subdomainDomainInput').value.trim();
+                if(!d) return;
+                stat.textContent = `Querying crt.sh for ${d}...`; oA.value = ''; oI.value = '';
+                btn.disabled = true; btn.classList.add('opacity-50');
+                try {
+                    const r = await fetch(`https://crt.sh/?q=%.${d}&output=json`);
+                    if(!r.ok) throw new Error();
+                    const subs = new Set();
+                    (await r.json()).forEach(c => c.name_value.split('\n').forEach(n => { if(n.endsWith(`.${d}`) && !n.includes('*')) subs.add(n.trim()); }));
+                    
+                    const act=[], inact=[]; let c=0;
+                    stat.textContent = `Pinging ${subs.size} subdomains...`;
+                    await Promise.all([...subs].map(s => fetch(`https://api.allorigins.win/raw?url=http://${s}`, {method:'HEAD'}).then(res => {
+                        (res.ok||res.status===403||res.status===404) ? act.push(s) : inact.push(s);
+                    }).catch(()=>inact.push(s)).finally(() => stat.textContent=`Pinging ${++c}/${subs.size}`)));
+                    
+                    oA.value = act.sort().join('\n'); oI.value = inact.sort().join('\n');
+                    stat.textContent = `Found ${act.length} Live, ${inact.length} Dead.`;
+                } catch(e) { stat.textContent = 'Error querying crt.sh'; }
+                btn.disabled = false; btn.classList.remove('opacity-50');
+            });
+        }
+
+        function setupSecurityHeaders() {
+            const btn = document.getElementById('headerAnalyzeBtn'), out = document.getElementById('headerOutput');
+            btn.addEventListener('click', async () => {
+                let u = document.getElementById('headerUrlInput').value.replace(/^https?:\/\//, ''); if(!u) return;
+                out.innerHTML = '<div class="text-center text-neon-cyan animate-pulse">Analyzing via HackerTarget...</div>';
+                try {
+                    const r = await (await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent('https://api.hackertarget.com/httpheaders/?q='+u)}`)).text();
+                    const hdrs = {}; r.split('\n').slice(1).forEach(l => { const i = l.indexOf(':'); if(i>0) hdrs[l.substring(0,i).trim().toLowerCase()] = l.substring(i+1).trim(); });
+                    
+                    const RECS = ['content-security-policy', 'strict-transport-security', 'x-content-type-options', 'x-frame-options'];
+                    let html = '<div class="output-table"><table><thead><tr><th>Header</th><th>Status</th></tr></thead><tbody>';
+                    RECS.forEach(h => html += `<tr><td class="key">${h}</td><td class="font-mono text-sm ${hdrs[h]?'text-neon-green':'text-neon-pink'}">${hdrs[h]?hdrs[h]:'MISSING'}</td></tr>`);
+                    html += '</tbody></table></div>';
+                    out.innerHTML = html;
+                } catch(e) { out.innerHTML = '<div class="text-neon-pink text-center">Failed to fetch headers.</div>'; }
+            });
+        }
+
+        function setupJWT() {
+            document.getElementById('jwtInput').addEventListener('input', e => {
+                const p = e.target.value.split('.');
+                const d = str => { try{ return JSON.stringify(JSON.parse(atob(str.replace(/-/g,'+').replace(/_/g,'/'))), null, 2); }catch(e){return 'Error decoding';} };
+                document.getElementById('jwtHeaderOutput').value = p[0] ? d(p[0]) : '';
+                document.getElementById('jwtPayloadOutput').value = p[1] ? d(p[1]) : '';
+            });
+        }
+
+        function setupTimestamp() {
+            document.getElementById('unixInput').addEventListener('input', e => document.getElementById('humanOutput').value = new Date(parseInt(e.target.value)*1000).toUTCString() || '');
+            document.getElementById('humanInput').addEventListener('input', e => document.getElementById('unixOutput').value = Math.floor(new Date(e.target.value).getTime()/1000) || '');
+        }
+
+        function setupURLParser() {
+            document.getElementById('urlInput').addEventListener('input', e => {
+                const out = document.getElementById('urlOutput');
+                try {
+                    const u = new URL(e.target.value); let p='';
+                    u.searchParams.forEach((v,k) => p+=`<tr><td class="key">Param: ${k}</td><td class="value">${v}</td></tr>`);
+                    out.innerHTML = `<table><tbody><tr><td class="key">Host</td><td class="value">${u.host}</td></tr><tr><td class="key">Path</td><td class="value">${u.pathname}</td></tr>${p}</tbody></table>`;
+                } catch(err) { out.innerHTML = ''; }
+            });
+        }
+
+        function setupIPCalculator() {
+            document.getElementById('ipInput').addEventListener('input', e => {
+                const out = document.getElementById('ipOutput');
+                const [ip, c] = e.target.value.split('/'); const cidr = parseInt(c);
+                if(!ip || isNaN(cidr) || cidr<0 || cidr>32) { out.innerHTML = ''; return; }
+                const pts = ip.split('.').map(Number);
+                if(pts.length!==4 || pts.some(p=>isNaN(p)||p<0||p>255)) return;
+                const ipL = pts.reduce((a, p) => (a<<8)+p, 0)>>>0, m = (-1<<(32-cidr))>>>0;
+                const net = ipL&m, bc = net|(~m>>>0), t = (l) => [(l>>>24)&255, (l>>>16)&255, (l>>>8)&255, l&255].join('.');
+                out.innerHTML = `<table><tbody><tr><td class="key">Network</td><td class="value">${t(net)}</td></tr><tr><td class="key">Broadcast</td><td class="value">${t(bc)}</td></tr><tr><td class="key">Usable Hosts</td><td class="value">${Math.max(0, Math.pow(2, 32-cidr)-2)}</td></tr></tbody></table>`;
+            });
+        }
+
+        function setupDNSLookup() {
+            document.getElementById('dnsLookupBtn').addEventListener('click', async () => {
+                const d = document.getElementById('dnsDomainInput').value, t = document.getElementById('dnsTypeSelect').value;
+                const out = document.getElementById('dnsOutput'); if(!d) return;
+                out.innerHTML = '<p class="text-zinc-500">Digging...</p>';
+                try {
+                    const res = await (await fetch(`https://dns.google/resolve?name=${d}&type=${t}`)).json();
+                    if(res.Answer) out.innerHTML = `<table><tbody>${res.Answer.map(a => `<tr><td class="key">${a.name}</td><td class="value">${a.data.replace(/\"/g,'')}</td></tr>`).join('')}</tbody></table>`;
+                    else out.innerHTML = '<p class="text-zinc-500">No records found.</p>';
+                } catch(e) { out.innerHTML = '<p class="text-neon-pink">Lookup failed.</p>'; }
+            });
+        }
+
+        function setupEXIFViewer() {
+            const dz = document.getElementById('file-drop-zone'), inp = document.getElementById('exifFileInput'), out = document.getElementById('exifOutput');
+            const run = f => {
+                if(!f || !f.type.match('image.*')) return;
+                EXIF.getData(f, function() {
+                    const t = EXIF.getAllTags(this);
+                    out.innerHTML = Object.keys(t).length ? `<table><tbody>${Object.entries(t).map(([k,v])=>`<tr><td class="key">${k}</td><td class="value">${v}</td></tr>`).join('')}</tbody></table>` : '<p class="text-zinc-500">No EXIF data.</p>';
+                });
+            };
+            dz.addEventListener('click', () => inp.click());
+            inp.addEventListener('change', e => run(e.target.files[0]));
+            dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('border-neon-cyan'); });
+            dz.addEventListener('dragleave', () => dz.classList.remove('border-neon-cyan'));
+            dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('border-neon-cyan'); run(e.dataTransfer.files[0]); });
+        }
     </script>
 </body>
 </html>
-
